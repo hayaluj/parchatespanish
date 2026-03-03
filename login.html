@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Log In — Parcháte en Spanish</title>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --cream: #ede6d6;
+      --green: #1e5c3f;
+      --green-dark: #164830;
+      --orange: #d4621a;
+      --orange-dark: #b8521a;
+      --yellow: #f0b429;
+      --text: #1a1a1a;
+      --muted: #666;
+      --border: #d5cfc3;
+      --error: #c0392b;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: var(--cream);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ── Decorative background ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 600px 400px at 10% 20%, rgba(30,92,63,0.07) 0%, transparent 70%),
+        radial-gradient(ellipse 500px 350px at 90% 80%, rgba(212,98,26,0.07) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ── Nav ── */
+    nav {
+      position: relative;
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.2rem 2.5rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-logo {
+      font-family: 'Fraunces', serif;
+      font-size: 1.3rem;
+      color: var(--green);
+      text-decoration: none;
+      font-weight: 700;
+    }
+
+    .nav-back {
+      font-size: 0.9rem;
+      color: var(--muted);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      transition: color 0.2s;
+    }
+    .nav-back:hover { color: var(--green); }
+
+    /* ── Main layout ── */
+    main {
+      position: relative;
+      z-index: 1;
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 3rem 1.5rem;
+    }
+
+    .auth-card {
+      background: white;
+      border-radius: 20px;
+      padding: 3rem 2.5rem;
+      width: 100%;
+      max-width: 440px;
+      box-shadow: 0 8px 40px rgba(0,0,0,0.1);
+    }
+
+    .auth-card-header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .auth-card-header .flag {
+      font-size: 2.2rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .auth-card-header h1 {
+      font-family: 'Fraunces', serif;
+      font-size: 1.75rem;
+      color: var(--green);
+      font-weight: 700;
+      margin-bottom: 0.4rem;
+    }
+
+    .auth-card-header p {
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    /* ── Tab switcher ── */
+    .auth-tabs {
+      display: flex;
+      background: var(--cream);
+      border-radius: 10px;
+      padding: 4px;
+      margin-bottom: 1.75rem;
+      gap: 4px;
+    }
+
+    .auth-tab {
+      flex: 1;
+      padding: 0.6rem;
+      border: none;
+      border-radius: 7px;
+      background: transparent;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: var(--muted);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .auth-tab.active {
+      background: white;
+      color: var(--green);
+      font-weight: 600;
+      box-shadow: 0 1px 6px rgba(0,0,0,0.1);
+    }
+
+    /* ── Forms ── */
+    .auth-panel { display: none; }
+    .auth-panel.active { display: block; }
+
+    .form-group {
+      margin-bottom: 1.1rem;
+    }
+
+    label {
+      display: block;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 0.4rem;
+    }
+
+    input[type="email"],
+    input[type="password"],
+    input[type="text"] {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      border: 1.5px solid var(--border);
+      border-radius: 9px;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 0.95rem;
+      color: var(--text);
+      background: #fafaf8;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      outline: none;
+    }
+
+    input:focus {
+      border-color: var(--green);
+      box-shadow: 0 0 0 3px rgba(30,92,63,0.1);
+      background: white;
+    }
+
+    .forgot-link {
+      display: block;
+      text-align: right;
+      font-size: 0.82rem;
+      color: var(--orange);
+      text-decoration: none;
+      margin-top: 0.3rem;
+      transition: color 0.2s;
+    }
+    .forgot-link:hover { color: var(--orange-dark); }
+
+    .btn-primary {
+      width: 100%;
+      padding: 0.85rem;
+      background: var(--green);
+      color: white;
+      border: none;
+      border-radius: 9px;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.1s;
+      margin-top: 0.5rem;
+    }
+    .btn-primary:hover { background: var(--green-dark); }
+    .btn-primary:active { transform: scale(0.99); }
+    .btn-primary:disabled { opacity: 0.6; cursor: not-allowed; }
+
+    .divider {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin: 1.25rem 0;
+      color: var(--muted);
+      font-size: 0.82rem;
+    }
+    .divider::before, .divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    .btn-google {
+      width: 100%;
+      padding: 0.8rem;
+      background: white;
+      color: var(--text);
+      border: 1.5px solid var(--border);
+      border-radius: 9px;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 500;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.6rem;
+      transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
+    }
+    .btn-google:hover {
+      background: #f8f8f6;
+      border-color: #aaa;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+
+    .google-icon {
+      width: 18px;
+      height: 18px;
+    }
+
+    /* ── Messages ── */
+    .msg {
+      padding: 0.75rem 1rem;
+      border-radius: 8px;
+      font-size: 0.88rem;
+      margin-bottom: 1rem;
+      display: none;
+    }
+    .msg.error { background: #fdecea; color: var(--error); border: 1px solid #f5c6c2; display: block; }
+    .msg.success { background: #e8f5ee; color: var(--green); border: 1px solid #b8dfc9; display: block; }
+
+    /* ── Forgot password panel ── */
+    .back-btn {
+      background: none;
+      border: none;
+      color: var(--orange);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 0.88rem;
+      font-weight: 500;
+      cursor: pointer;
+      padding: 0;
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+      transition: color 0.2s;
+    }
+    .back-btn:hover { color: var(--orange-dark); }
+
+    .reset-info {
+      font-size: 0.9rem;
+      color: var(--muted);
+      line-height: 1.6;
+      margin-bottom: 1.5rem;
+    }
+
+    @media (max-width: 480px) {
+      nav { padding: 1rem 1.25rem; }
+      .auth-card { padding: 2rem 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="/" class="nav-logo">Parcháte en Spanish</a>
+  <a href="/" class="nav-back">← Back to site</a>
+</nav>
+
+<main>
+  <div class="auth-card">
+
+    <!-- Default: login/signup view -->
+    <div id="auth-main">
+      <div class="auth-card-header">
+        <div class="flag">🇨🇴</div>
+        <h1>Welcome back</h1>
+        <p>Log in or create your student account</p>
+      </div>
+
+      <div class="auth-tabs">
+        <button class="auth-tab active" onclick="switchTab('login')">Log in</button>
+        <button class="auth-tab" onclick="switchTab('signup')">Sign up</button>
+      </div>
+
+      <div id="msg-main" class="msg"></div>
+
+      <!-- LOGIN -->
+      <div id="panel-login" class="auth-panel active">
+        <div class="form-group">
+          <label for="login-email">Email</label>
+          <input type="email" id="login-email" placeholder="you@email.com" autocomplete="email">
+        </div>
+        <div class="form-group">
+          <label for="login-password">Password</label>
+          <input type="password" id="login-password" placeholder="••••••••" autocomplete="current-password">
+          <a href="#" class="forgot-link" onclick="showForgot(event)">Forgot password?</a>
+        </div>
+        <button class="btn-primary" id="btn-login" onclick="handleLogin()">Log in</button>
+        <div class="divider">or</div>
+        <button class="btn-google" onclick="handleGoogle()">
+          <svg class="google-icon" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+          Continue with Google
+        </button>
+      </div>
+
+      <!-- SIGN UP -->
+      <div id="panel-signup" class="auth-panel">
+        <div class="form-group">
+          <label for="signup-name">Full name</label>
+          <input type="text" id="signup-name" placeholder="Your name" autocomplete="name">
+        </div>
+        <div class="form-group">
+          <label for="signup-email">Email</label>
+          <input type="email" id="signup-email" placeholder="you@email.com" autocomplete="email">
+        </div>
+        <div class="form-group">
+          <label for="signup-password">Password</label>
+          <input type="password" id="signup-password" placeholder="Min. 8 characters" autocomplete="new-password">
+        </div>
+        <button class="btn-primary" id="btn-signup" onclick="handleSignup()">Create account</button>
+        <div class="divider">or</div>
+        <button class="btn-google" onclick="handleGoogle()">
+          <svg class="google-icon" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84z"/></svg>
+          Continue with Google
+        </button>
+      </div>
+    </div>
+
+    <!-- Forgot password view -->
+    <div id="auth-forgot" style="display:none">
+      <button class="back-btn" onclick="showMain()">← Back to login</button>
+      <div class="auth-card-header" style="text-align:left; margin-bottom:0.5rem">
+        <h1 style="font-size:1.5rem">Reset password</h1>
+      </div>
+      <p class="reset-info">Enter your email and we'll send you a link to reset your password.</p>
+      <div id="msg-forgot" class="msg"></div>
+      <div class="form-group">
+        <label for="forgot-email">Email</label>
+        <input type="email" id="forgot-email" placeholder="you@email.com">
+      </div>
+      <button class="btn-primary" id="btn-forgot" onclick="handleForgot()">Send reset link</button>
+    </div>
+
+  </div>
+</main>
+
+<!-- Supabase JS client -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+  // ── Config — replace with your values ─────────────────────
+  const SUPABASE_URL = 'https://xqtpqhjddxalnhrkbnnn.supabase.co';   
+  const SUPABASE_ANON_KEY = 'sb_publishable_0y6Hw4J6ECitfSRVa6Krsg_SHcB_aJR';                        
+  const DASHBOARD_URL = '/dashboard.html';
+  // ──────────────────────────────────────────────────────────
+
+  const { createClient } = supabase;
+  const sb = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+  // Redirect if already logged in
+  sb.auth.getSession().then(({ data }) => {
+    if (data.session) window.location.href = DASHBOARD_URL;
+  });
+
+  // Handle OAuth redirect (Google)
+  sb.auth.onAuthStateChange((event, session) => {
+    if (event === 'SIGNED_IN' && session) {
+      window.location.href = DASHBOARD_URL;
+    }
+  });
+
+  function switchTab(tab) {
+    document.querySelectorAll('.auth-tab').forEach((t, i) => {
+      t.classList.toggle('active', (i === 0) === (tab === 'login'));
+    });
+    document.getElementById('panel-login').classList.toggle('active', tab === 'login');
+    document.getElementById('panel-signup').classList.toggle('active', tab === 'signup');
+    clearMsg('main');
+  }
+
+  function showForgot(e) {
+    e.preventDefault();
+    document.getElementById('auth-main').style.display = 'none';
+    document.getElementById('auth-forgot').style.display = 'block';
+    const loginEmail = document.getElementById('login-email').value;
+    if (loginEmail) document.getElementById('forgot-email').value = loginEmail;
+  }
+
+  function showMain() {
+    document.getElementById('auth-main').style.display = 'block';
+    document.getElementById('auth-forgot').style.display = 'none';
+    clearMsg('forgot');
+  }
+
+  function showMsg(zone, type, text) {
+    const el = document.getElementById('msg-' + zone);
+    el.className = 'msg ' + type;
+    el.textContent = text;
+  }
+
+  function clearMsg(zone) {
+    const el = document.getElementById('msg-' + zone);
+    el.className = 'msg';
+    el.textContent = '';
+  }
+
+  function setLoading(btnId, loading, label) {
+    const btn = document.getElementById(btnId);
+    btn.disabled = loading;
+    btn.textContent = loading ? 'Please wait...' : label;
+  }
+
+  async function handleLogin() {
+    const email = document.getElementById('login-email').value.trim();
+    const password = document.getElementById('login-password').value;
+    if (!email || !password) return showMsg('main', 'error', 'Please fill in all fields.');
+    setLoading('btn-login', true, 'Log in');
+    const { error } = await sb.auth.signInWithPassword({ email, password });
+    setLoading('btn-login', false, 'Log in');
+    if (error) return showMsg('main', 'error', error.message);
+    window.location.href = DASHBOARD_URL;
+  }
+
+  async function handleSignup() {
+    const name = document.getElementById('signup-name').value.trim();
+    const email = document.getElementById('signup-email').value.trim();
+    const password = document.getElementById('signup-password').value;
+    if (!name || !email || !password) return showMsg('main', 'error', 'Please fill in all fields.');
+    if (password.length < 8) return showMsg('main', 'error', 'Password must be at least 8 characters.');
+    setLoading('btn-signup', true, 'Create account');
+    const { error } = await sb.auth.signUp({
+      email, password,
+      options: { data: { full_name: name } }
+    });
+    setLoading('btn-signup', false, 'Create account');
+    if (error) return showMsg('main', 'error', error.message);
+    showMsg('main', 'success', 'Account created! Check your email to confirm, then log in.');
+  }
+
+  async function handleGoogle() {
+    const { error } = await sb.auth.signInWithOAuth({
+      provider: 'google',
+      options: { redirectTo: window.location.origin + DASHBOARD_URL }
+    });
+    if (error) showMsg('main', 'error', error.message);
+  }
+
+  async function handleForgot() {
+    const email = document.getElementById('forgot-email').value.trim();
+    if (!email) return showMsg('forgot', 'error', 'Please enter your email.');
+    setLoading('btn-forgot', true, 'Send reset link');
+    const { error } = await sb.auth.resetPasswordForEmail(email, {
+      redirectTo: window.location.origin + '/reset-password.html'
+    });
+    setLoading('btn-forgot', false, 'Send reset link');
+    if (error) return showMsg('forgot', 'error', error.message);
+    showMsg('forgot', 'success', 'Reset link sent! Check your inbox (and spam folder).');
+  }
+
+  // Enter key support
+  document.addEventListener('keydown', (e) => {
+    if (e.key !== 'Enter') return;
+    const forgotVisible = document.getElementById('auth-forgot').style.display !== 'none';
+    if (forgotVisible) return handleForgot();
+    const isLogin = document.getElementById('panel-login').classList.contains('active');
+    if (isLogin) handleLogin(); else handleSignup();
+  });
+</script>
+</body>
+</html>

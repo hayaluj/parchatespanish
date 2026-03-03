@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Dashboard — Parcháte en Spanish</title>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --cream: #ede6d6; --green: #1e5c3f; --green-dark: #164830; --green-light: #e8f5ee;
+      --orange: #d4621a; --yellow: #f0b429; --text: #1a1a1a;
+      --muted: #777; --border: #e0d9ce; --card-bg: white;
+    }
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: var(--cream);
+      min-height: 100vh;
+      color: var(--text);
+    }
+
+    /* ── Nav ── */
+    nav {
+      background: white;
+      border-bottom: 1px solid var(--border);
+      padding: 0 2.5rem;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .nav-logo {
+      font-family: 'Fraunces', serif;
+      font-size: 1.25rem;
+      color: var(--green);
+      text-decoration: none;
+      font-weight: 700;
+    }
+    .nav-right { display: flex; align-items: center; gap: 1.25rem; }
+    .nav-name { font-size: 0.9rem; color: var(--muted); }
+    .btn-logout {
+      padding: 0.45rem 1rem;
+      background: transparent;
+      color: var(--orange);
+      border: 1.5px solid var(--orange);
+      border-radius: 7px;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-logout:hover { background: var(--orange); color: white; }
+
+    /* ── Layout ── */
+    .page { max-width: 900px; margin: 0 auto; padding: 2.5rem 1.5rem; }
+
+    .page-header { margin-bottom: 2rem; }
+    .page-header h1 {
+      font-family: 'Fraunces', serif;
+      font-size: 2rem;
+      color: var(--green);
+      margin-bottom: 0.3rem;
+    }
+    .page-header p { color: var(--muted); font-size: 0.95rem; }
+
+    /* ── Stats row ── */
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+    .stat-card {
+      background: white;
+      border-radius: 14px;
+      padding: 1.4rem 1.5rem;
+      border: 1px solid var(--border);
+    }
+    .stat-label { font-size: 0.8rem; color: var(--muted); font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.5rem; }
+    .stat-value { font-family: 'Fraunces', serif; font-size: 2rem; color: var(--green); font-weight: 700; }
+    .stat-sub { font-size: 0.8rem; color: var(--muted); margin-top: 0.2rem; }
+
+    /* ── Tabs ── */
+    .tabs {
+      display: flex;
+      gap: 0.25rem;
+      background: white;
+      border-radius: 12px;
+      padding: 5px;
+      border: 1px solid var(--border);
+      margin-bottom: 1.5rem;
+      width: fit-content;
+    }
+    .tab-btn {
+      padding: 0.55rem 1.2rem;
+      border: none;
+      border-radius: 8px;
+      background: transparent;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: var(--muted);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .tab-btn.active { background: var(--green); color: white; font-weight: 600; }
+
+    /* ── Sections ── */
+    .tab-section { display: none; }
+    .tab-section.active { display: block; }
+
+    .section-card {
+      background: white;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      overflow: hidden;
+    }
+
+    .section-card-header {
+      padding: 1.2rem 1.5rem;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .section-card-header h2 { font-size: 1rem; font-weight: 600; color: var(--text); }
+
+    /* ── Purchase rows ── */
+    .purchase-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 1.5rem;
+      border-bottom: 1px solid #f5f0e8;
+      transition: background 0.15s;
+    }
+    .purchase-row:last-child { border-bottom: none; }
+    .purchase-row:hover { background: #fdfcf9; }
+    .purchase-info { flex: 1; }
+    .purchase-name { font-size: 0.95rem; font-weight: 500; color: var(--text); margin-bottom: 0.2rem; }
+    .purchase-date { font-size: 0.8rem; color: var(--muted); }
+    .purchase-amount {
+      font-family: 'Fraunces', serif;
+      font-size: 1.05rem;
+      color: var(--green);
+      font-weight: 600;
+    }
+    .purchase-badge {
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 0.25rem 0.7rem;
+      border-radius: 20px;
+      margin-left: 1rem;
+    }
+    .badge-paid { background: var(--green-light); color: var(--green); }
+
+    /* ── Booking section ── */
+    .booking-card {
+      padding: 2rem 1.5rem;
+      text-align: center;
+    }
+    .booking-card .emoji { font-size: 2.5rem; margin-bottom: 0.75rem; }
+    .booking-card h3 { font-family: 'Fraunces', serif; font-size: 1.25rem; color: var(--text); margin-bottom: 0.5rem; }
+    .booking-card p { color: var(--muted); font-size: 0.9rem; margin-bottom: 1.25rem; line-height: 1.6; }
+    .btn-book {
+      display: inline-block;
+      padding: 0.75rem 1.75rem;
+      background: var(--orange);
+      color: white;
+      border-radius: 9px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.95rem;
+      transition: background 0.2s;
+    }
+    .btn-book:hover { background: #b8521a; }
+
+    /* ── Materials ── */
+    .material-row {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1rem 1.5rem;
+      border-bottom: 1px solid #f5f0e8;
+      transition: background 0.15s;
+    }
+    .material-row:last-child { border-bottom: none; }
+    .material-row:hover { background: #fdfcf9; }
+    .material-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      flex-shrink: 0;
+    }
+    .icon-pdf { background: #fdecea; }
+    .icon-video { background: #fff3e0; }
+    .icon-audio { background: var(--green-light); }
+    .material-info { flex: 1; }
+    .material-name { font-size: 0.9rem; font-weight: 500; color: var(--text); margin-bottom: 0.15rem; }
+    .material-meta { font-size: 0.78rem; color: var(--muted); }
+    .material-locked { opacity: 0.45; }
+    .lock-badge {
+      font-size: 0.78rem;
+      color: var(--muted);
+      background: #f0ede8;
+      padding: 0.25rem 0.6rem;
+      border-radius: 6px;
+    }
+
+    /* ── Empty state ── */
+    .empty-state {
+      padding: 3rem 1.5rem;
+      text-align: center;
+    }
+    .empty-state .emoji { font-size: 2.5rem; margin-bottom: 0.75rem; }
+    .empty-state p { color: var(--muted); font-size: 0.9rem; line-height: 1.6; }
+    .empty-state a { color: var(--orange); text-decoration: none; font-weight: 500; }
+    .empty-state a:hover { text-decoration: underline; }
+
+    /* ── Loading ── */
+    .loading { padding: 2.5rem; text-align: center; color: var(--muted); font-size: 0.9rem; }
+
+    /* ── Account section ── */
+    .account-form { padding: 1.5rem; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem; }
+    .form-group { margin-bottom: 1rem; }
+    .form-group label { display: block; font-size: 0.83rem; font-weight: 600; color: var(--text); margin-bottom: 0.35rem; }
+    .form-group input {
+      width: 100%; padding: 0.7rem 1rem;
+      border: 1.5px solid var(--border); border-radius: 8px;
+      font-family: 'Plus Jakarta Sans', sans-serif; font-size: 0.9rem;
+      color: var(--text); background: #fafaf8; outline: none;
+      transition: border-color 0.2s;
+    }
+    .form-group input:focus { border-color: var(--green); background: white; }
+    .btn-save {
+      padding: 0.7rem 1.75rem;
+      background: var(--green); color: white; border: none;
+      border-radius: 8px; font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 0.9rem; font-weight: 600; cursor: pointer;
+      transition: background 0.2s;
+    }
+    .btn-save:hover { background: var(--green-dark); }
+    .save-msg { font-size: 0.85rem; color: var(--green); margin-left: 1rem; display: none; }
+
+    @media (max-width: 640px) {
+      nav { padding: 0 1rem; }
+      .stats { grid-template-columns: 1fr 1fr; }
+      .form-row { grid-template-columns: 1fr; }
+      .tabs { width: 100%; }
+      .tab-btn { flex: 1; text-align: center; }
+    }
+    @media (max-width: 400px) {
+      .stats { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="/" class="nav-logo">Parcháte en Spanish</a>
+  <div class="nav-right">
+    <span class="nav-name" id="nav-name"></span>
+    <button class="btn-logout" onclick="logout()">Log out</button>
+  </div>
+</nav>
+
+<div class="page">
+  <div class="page-header">
+    <h1 id="greeting">Welcome back!</h1>
+    <p>Manage your lessons, bookings, and course materials here.</p>
+  </div>
+
+  <div class="stats">
+    <div class="stat-card">
+      <div class="stat-label">Total spent</div>
+      <div class="stat-value" id="stat-spent">—</div>
+      <div class="stat-sub">across all purchases</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Purchases</div>
+      <div class="stat-value" id="stat-count">—</div>
+      <div class="stat-sub">lesson packs &amp; add-ons</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Materials</div>
+      <div class="stat-value" id="stat-materials">—</div>
+      <div class="stat-sub">available to you</div>
+    </div>
+  </div>
+
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchTab('purchases')">Purchases</button>
+    <button class="tab-btn" onclick="switchTab('bookings')">Bookings</button>
+    <button class="tab-btn" onclick="switchTab('materials')">Materials</button>
+    <button class="tab-btn" onclick="switchTab('account')">Account</button>
+  </div>
+
+  <!-- PURCHASES -->
+  <div id="tab-purchases" class="tab-section active">
+    <div class="section-card">
+      <div class="section-card-header">
+        <h2>Purchase history</h2>
+      </div>
+      <div id="purchases-list"><div class="loading">Loading...</div></div>
+    </div>
+  </div>
+
+  <!-- BOOKINGS -->
+  <div id="tab-bookings" class="tab-section">
+    <div class="section-card">
+      <div class="section-card-header">
+        <h2>Your bookings</h2>
+      </div>
+      <div class="booking-card">
+        <div class="emoji">📅</div>
+        <h3>Schedule or reschedule a session</h3>
+        <p>Use our Calendly link to book a new session or manage existing bookings. If you need to cancel, please give at least 24 hours notice.</p>
+        <a href="https://calendly.com/YOUR_LINK_HERE" target="_blank" class="btn-book">Open booking calendar →</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- MATERIALS -->
+  <div id="tab-materials" class="tab-section">
+    <div class="section-card">
+      <div class="section-card-header">
+        <h2>Course materials</h2>
+      </div>
+      <div id="materials-list"><div class="loading">Loading...</div></div>
+    </div>
+  </div>
+
+  <!-- ACCOUNT -->
+  <div id="tab-account" class="tab-section">
+    <div class="section-card">
+      <div class="section-card-header">
+        <h2>Account settings</h2>
+      </div>
+      <div class="account-form">
+        <div class="form-row">
+          <div class="form-group">
+            <label>Full name</label>
+            <input type="text" id="acc-name" placeholder="Your name">
+          </div>
+          <div class="form-group">
+            <label>Email</label>
+            <input type="text" id="acc-email" disabled style="opacity:0.6;cursor:not-allowed">
+          </div>
+        </div>
+        <button class="btn-save" onclick="saveProfile()">Save changes</button>
+        <span class="save-msg" id="save-msg">Saved!</span>
+        <hr style="margin: 1.75rem 0; border: none; border-top: 1px solid var(--border)">
+        <div class="form-group" style="max-width:340px">
+          <label>New password</label>
+          <input type="password" id="acc-password" placeholder="Leave blank to keep current">
+        </div>
+        <button class="btn-save" onclick="savePassword()">Update password</button>
+        <span class="save-msg" id="save-pw-msg">Password updated!</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+  // ── Config — replace with your values ─────────────────────
+  const SUPABASE_URL = 'https://xqtpqhjddxalnhrkbnnn.supabase.co';  
+  const SUPABASE_ANON_KEY = 'sb_publishable_0y6Hw4J6ECitfSRVa6Krsg_SHcB_aJR';                       
+  const CALENDLY_URL = 'https://calendly.com/parchatespanish-sales';  
+  // ──────────────────────────────────────────────────────────
+
+  const { createClient } = supabase;
+  const sb = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+  let currentUser = null;
+
+  // ── Auth guard ── redirect if not logged in
+  async function init() {
+    const { data: { session } } = await sb.auth.getSession();
+    if (!session) return window.location.href = '/login.html';
+
+    currentUser = session.user;
+    const name = currentUser.user_metadata?.full_name || currentUser.email.split('@')[0];
+
+    document.getElementById('greeting').textContent = 'Welcome back, ' + name.split(' ')[0] + '!';
+    document.getElementById('nav-name').textContent = name;
+    document.getElementById('acc-name').value = name;
+    document.getElementById('acc-email').value = currentUser.email;
+
+    loadPurchases();
+    loadMaterials();
+  }
+
+  async function loadPurchases() {
+    const { data, error } = await sb
+      .from('purchases')
+      .select('*')
+      .eq('stripe_customer_email', currentUser.email)
+      .order('created_at', { ascending: false });
+
+    const container = document.getElementById('purchases-list');
+    const statSpent = document.getElementById('stat-spent');
+    const statCount = document.getElementById('stat-count');
+
+    if (error || !data || data.length === 0) {
+      statSpent.textContent = '$0';
+      statCount.textContent = '0';
+      container.innerHTML = `
+        <div class="empty-state">
+          <div class="emoji">🛒</div>
+          <p>No purchases yet. <a href="/#prices">Browse our lesson packages →</a></p>
+        </div>`;
+      return;
+    }
+
+    const total = data.reduce((sum, p) => sum + (p.amount_usd || 0), 0);
+    statSpent.textContent = '$' + total.toFixed(0);
+    statCount.textContent = data.length;
+
+    const productNames = {
+      individual_credits: 'Individual Lessons',
+      group_credits: 'Group Classes',
+      parche_pack: 'Parche Pack',
+      slang_bootcamp: 'Slang Bootcamp',
+      event: 'Event Ticket',
+    };
+
+    container.innerHTML = data.map(p => `
+      <div class="purchase-row">
+        <div class="purchase-info">
+          <div class="purchase-name">${productNames[p.product_type] || p.product_name || p.product_type}</div>
+          <div class="purchase-date">${new Date(p.created_at).toLocaleDateString('en-US', { year:'numeric', month:'long', day:'numeric' })}</div>
+        </div>
+        <div style="display:flex;align-items:center">
+          <div class="purchase-amount">${p.amount_usd ? '$' + p.amount_usd.toFixed(2) : '—'}</div>
+          <span class="purchase-badge badge-paid">Paid</span>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  async function loadMaterials() {
+    // Check what the user has purchased to unlock materials
+    const { data: purchases } = await sb
+      .from('purchases')
+      .select('product_type')
+      .eq('stripe_customer_email', currentUser.email);
+
+    const purchasedTypes = new Set((purchases || []).map(p => p.product_type));
+
+    // Define your materials here — add real URLs when you have them
+    const allMaterials = [
+      { name: 'Colombian Slang Masterlist (PDF)', type: 'pdf', icon: 'icon-pdf', emoji: '📄', requires: 'slang_bootcamp', meta: 'Slang Bootcamp', url: '#' },
+      { name: 'Pronunciation Audio Pack', type: 'audio', icon: 'icon-audio', emoji: '🎧', requires: 'individual_credits', meta: 'For lesson students', url: '#' },
+      { name: 'Intro to Colombian Culture (PDF)', type: 'pdf', icon: 'icon-pdf', emoji: '📄', requires: null, meta: 'Free for all students', url: '#' },
+      { name: 'Common Phrases Flashcards', type: 'pdf', icon: 'icon-pdf', emoji: '📄', requires: 'group_credits', meta: 'Group class students', url: '#' },
+      { name: 'Parche Pack — Conversation Guide', type: 'pdf', icon: 'icon-pdf', emoji: '📄', requires: 'parche_pack', meta: 'Parche Pack students', url: '#' },
+    ];
+
+    const unlocked = allMaterials.filter(m => !m.requires || purchasedTypes.has(m.requires));
+    const locked = allMaterials.filter(m => m.requires && !purchasedTypes.has(m.requires));
+
+    document.getElementById('stat-materials').textContent = unlocked.length;
+
+    const container = document.getElementById('materials-list');
+
+    const renderRow = (m, isLocked) => `
+      <div class="material-row ${isLocked ? 'material-locked' : ''}">
+        <div class="material-icon ${m.icon}">${m.emoji}</div>
+        <div class="material-info">
+          <div class="material-name">${m.name}</div>
+          <div class="material-meta">${m.meta}</div>
+        </div>
+        ${isLocked
+          ? '<span class="lock-badge">🔒 Requires purchase</span>'
+          : `<a href="${m.url}" style="font-size:0.85rem;color:var(--orange);text-decoration:none;font-weight:500">Download →</a>`
+        }
+      </div>`;
+
+    container.innerHTML =
+      unlocked.map(m => renderRow(m, false)).join('') +
+      locked.map(m => renderRow(m, true)).join('');
+  }
+
+  function switchTab(tab) {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.tab-section').forEach(s => s.classList.remove('active'));
+    event.target.classList.add('active');
+    document.getElementById('tab-' + tab).classList.add('active');
+  }
+
+  async function saveProfile() {
+    const name = document.getElementById('acc-name').value.trim();
+    const { error } = await sb.auth.updateUser({ data: { full_name: name } });
+    if (!error) {
+      const msg = document.getElementById('save-msg');
+      msg.style.display = 'inline';
+      setTimeout(() => msg.style.display = 'none', 2500);
+    }
+  }
+
+  async function savePassword() {
+    const pw = document.getElementById('acc-password').value;
+    if (!pw || pw.length < 8) return alert('Password must be at least 8 characters.');
+    const { error } = await sb.auth.updateUser({ password: pw });
+    if (error) return alert(error.message);
+    document.getElementById('acc-password').value = '';
+    const msg = document.getElementById('save-pw-msg');
+    msg.style.display = 'inline';
+    setTimeout(() => msg.style.display = 'none', 2500);
+  }
+
+  async function logout() {
+    await sb.auth.signOut();
+    window.location.href = '/';
+  }
+
+  init();
+</script>
+</body>
+</html>
