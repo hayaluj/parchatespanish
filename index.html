@@ -1136,7 +1136,7 @@ footer {
         <label class="form-label">Learning Goals</label>
         <textarea class="form-textarea" placeholder="e.g. I want to move to Medellín and navigate daily life with confidence…"></textarea>
       </div>
-      <button class="btn-book">Send</button>
+      <button class="btn-book" onclick="sendContactForm(event)">Send</button>
     </div>
   </div>
 </section>
@@ -1548,6 +1548,28 @@ footer {
   });
 })();
 </script>
-
+<script>
+async function sendContactForm(e) {
+  e.preventDefault();
+  const btn = e.target;
+  const inputs = document.querySelectorAll('.contact-form .form-input, .contact-form .form-select, .contact-form .form-textarea');
+  const data = {};
+  inputs.forEach(i => { data[i.placeholder || i.className] = i.value; });
+  btn.textContent = 'Sending...';
+  btn.disabled = true;
+  const res = await fetch('https://formspree.io/f/xaqdgrkk', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+    body: JSON.stringify(data)
+  });
+  if (res.ok) {
+    btn.textContent = 'Sent!';
+    inputs.forEach(i => i.value = '');
+  } else {
+    btn.textContent = 'Error — try WhatsApp';
+    btn.disabled = false;
+  }
+}
+</script>
 </body>
 </html>
