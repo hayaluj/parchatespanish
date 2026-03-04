@@ -67,7 +67,7 @@ nav {
 .nav-links a:hover { color: var(--orange); }
 .btn-nav {
   background: var(--orange);
-  color: white; padding: 11px 26px 9px;
+  color: white; padding: 11px 26px 7px;
   border-radius: 50px; font-weight: 800; font-size: 14px;
   text-decoration: none; letter-spacing: 0.3px;
   transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
@@ -746,7 +746,7 @@ footer {
     <a href="#prices">Prices</a>
     <a href="#events">Events</a>
     <a href="#contact">Contact</a>
-    <a href="#" class="btn-nav" onclick="openAuthModal()">Get Started</a>
+    <a href="#" class="btn-nav" onclick="openSignupModal()">Get Started</a>
     <button onclick="openAuthModal()" class="nav-auth-btn">Log in</button>
   </div>
 </nav>
@@ -1546,7 +1546,11 @@ footer {
   document.addEventListener('keydown', e => {
     if (e.key === 'Escape') closeAuthModal();
   });
-})();
+window.openSignupModal = function() {
+    openAuthModal();
+    setTimeout(() => modalSwitchTab('signup', {target: document.querySelectorAll('.modal-tab')[1]}), 50);
+  };
+  })();
 </script>
 <script>
 async function sendContactForm(e) {
