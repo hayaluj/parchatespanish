@@ -9,144 +9,195 @@
   <style>
     :root {
       --cream: #ede6d6;
+      --cream-dark: #e0d9c8;
       --green: #1e5c3f;
       --green-light: #2d7a54;
       --orange: #d4621a;
       --yellow: #f0b429;
       --dark: #1a1a1a;
       --text: #2c2c2c;
-      --text-muted: #666;
-      --border: rgba(0,0,0,0.08);
+      --text-muted: #7a6f5e;
+      --border: rgba(0,0,0,0.07);
       --sidebar-width: 260px;
     }
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--cream); color: var(--text); min-height: 100vh; }
 
-    #auth-gate { display:flex; align-items:center; justify-content:center; min-height:100vh; padding:2rem; }
-    .auth-gate-card { background:white; border-radius:20px; padding:3rem; max-width:420px; width:100%; text-align:center; box-shadow:0 8px 40px rgba(0,0,0,0.1); }
+    /* AUTH GATE */
+    #auth-gate { display:flex; align-items:center; justify-content:center; min-height:100vh; padding:2rem; background:var(--cream); }
+    .auth-gate-card { background:white; border-radius:24px; padding:3rem; max-width:420px; width:100%; text-align:center; box-shadow:0 8px 40px rgba(0,0,0,0.08); border:1px solid var(--border); }
     .auth-gate-card h2 { font-family:'Fraunces',serif; color:var(--green); font-size:1.8rem; margin-bottom:0.5rem; }
     .auth-gate-card p { color:var(--text-muted); margin-bottom:1.5rem; }
     .btn-green { display:inline-block; padding:0.85rem 2rem; background:var(--green); color:white; border-radius:50px; font-weight:700; text-decoration:none; font-size:0.95rem; border:none; cursor:pointer; transition:background 0.2s; }
     .btn-green:hover { background:var(--green-light); }
 
+    /* APP */
     #app { display:none; min-height:100vh; }
     .layout { display:flex; min-height:100vh; }
 
+    /* SIDEBAR */
     .sidebar { width:var(--sidebar-width); background:var(--green); position:fixed; top:0; left:0; height:100vh; display:flex; flex-direction:column; z-index:100; overflow-y:auto; }
-    .sidebar-logo { padding:1.5rem; border-bottom:1px solid rgba(255,255,255,0.1); }
-    .sidebar-logo a { display:flex; align-items:center; gap:0.75rem; text-decoration:none; }
-    .sidebar-logo span { font-family:'Fraunces',serif; color:white; font-size:1.1rem; line-height:1.2; }
-    .logo-sub { font-size:0.7rem; color:rgba(255,255,255,0.5); font-family:'Plus Jakarta Sans',sans-serif; font-weight:500; letter-spacing:1px; text-transform:uppercase; display:block; }
-    .sidebar-user { padding:1.25rem 1.5rem; border-bottom:1px solid rgba(255,255,255,0.1); }
-    .user-avatar { width:36px; height:36px; border-radius:50%; background:var(--yellow); display:flex; align-items:center; justify-content:center; font-weight:800; color:var(--dark); font-size:0.85rem; flex-shrink:0; }
+    .sidebar-logo { padding:1.25rem 1.5rem; border-bottom:1px solid rgba(255,255,255,0.1); display:flex; align-items:center; gap:0.75rem; }
+    .sidebar-logo img { width:44px; height:44px; border-radius:10px; object-fit:cover; }
+    .sidebar-logo-text { font-family:'Fraunces',serif; color:white; font-size:1rem; line-height:1.15; }
+    .logo-sub { font-size:0.65rem; color:rgba(255,255,255,0.45); font-family:'Plus Jakarta Sans',sans-serif; font-weight:600; letter-spacing:1.5px; text-transform:uppercase; display:block; }
+    .sidebar-user { padding:1rem 1.5rem; border-bottom:1px solid rgba(255,255,255,0.1); }
     .user-info { display:flex; align-items:center; gap:0.75rem; }
-    .user-name { color:white; font-size:0.85rem; font-weight:600; }
-    .user-email { color:rgba(255,255,255,0.5); font-size:0.75rem; }
-    .sidebar-nav { flex:1; padding:1rem 0; }
-    .nav-label { padding:0.5rem 1.5rem; font-size:0.65rem; font-weight:800; letter-spacing:2px; text-transform:uppercase; color:rgba(255,255,255,0.35); margin-top:0.5rem; }
-    .nav-item { display:flex; align-items:center; gap:0.75rem; padding:0.75rem 1.5rem; color:rgba(255,255,255,0.65); font-size:0.875rem; font-weight:500; cursor:pointer; transition:all 0.15s; border-left:3px solid transparent; text-decoration:none; }
-    .nav-item:hover { background:rgba(255,255,255,0.08); color:white; }
-    .nav-item.active { background:rgba(255,255,255,0.12); color:white; border-left-color:var(--yellow); font-weight:700; }
-    .nav-icon { font-size:1.1rem; width:20px; text-align:center; flex-shrink:0; }
-    .sidebar-footer { padding:1.25rem 1.5rem; border-top:1px solid rgba(255,255,255,0.1); }
-    .btn-logout { display:flex; align-items:center; gap:0.5rem; color:rgba(255,255,255,0.5); font-size:0.8rem; background:none; border:none; cursor:pointer; font-family:'Plus Jakarta Sans',sans-serif; transition:color 0.15s; }
+    .user-avatar { width:36px; height:36px; border-radius:50%; background:var(--yellow); display:flex; align-items:center; justify-content:center; font-weight:800; color:var(--dark); font-size:0.85rem; flex-shrink:0; }
+    .user-name { color:white; font-size:0.875rem; font-weight:600; }
+    .user-email { color:rgba(255,255,255,0.45); font-size:0.72rem; }
+    .sidebar-nav { flex:1; padding:0.75rem 0; }
+    .nav-label { padding:0.5rem 1.5rem; font-size:0.62rem; font-weight:800; letter-spacing:2px; text-transform:uppercase; color:rgba(255,255,255,0.3); margin-top:0.5rem; }
+    .nav-item { display:flex; align-items:center; gap:0.75rem; padding:0.7rem 1.5rem; color:rgba(255,255,255,0.6); font-size:0.875rem; font-weight:500; cursor:pointer; transition:all 0.15s; border-left:3px solid transparent; text-decoration:none; }
+    .nav-item:hover { background:rgba(255,255,255,0.07); color:white; }
+    .nav-item.active { background:rgba(255,255,255,0.11); color:white; border-left-color:var(--yellow); font-weight:700; }
+    .nav-icon { font-size:1rem; width:20px; text-align:center; flex-shrink:0; }
+    .sidebar-footer { padding:1rem 1.5rem; border-top:1px solid rgba(255,255,255,0.1); }
+    .btn-logout { display:flex; align-items:center; gap:0.5rem; color:rgba(255,255,255,0.45); font-size:0.8rem; background:none; border:none; cursor:pointer; font-family:'Plus Jakarta Sans',sans-serif; transition:color 0.15s; }
     .btn-logout:hover { color:white; }
 
-    .main { margin-left:var(--sidebar-width); flex:1; min-height:100vh; }
-    .topbar { background:white; border-bottom:1px solid var(--border); padding:1rem 2rem; display:flex; align-items:center; justify-content:space-between; position:sticky; top:0; z-index:50; }
-    .page-title { font-family:'Fraunces',serif; font-size:1.4rem; color:var(--green); }
+    /* MAIN */
+    .main { margin-left:var(--sidebar-width); flex:1; }
+    .topbar { background:var(--cream-dark); border-bottom:1px solid var(--border); padding:0.875rem 2rem; display:flex; align-items:center; justify-content:space-between; position:sticky; top:0; z-index:50; }
+    .page-title { font-family:'Fraunces',serif; font-size:1.3rem; color:var(--green); }
     .back-to-site { font-size:0.8rem; color:var(--text-muted); text-decoration:none; transition:color 0.15s; }
     .back-to-site:hover { color:var(--green); }
-    .content { padding:2rem; max-width:1100px; }
+    .content { padding:1.75rem 2rem; max-width:1100px; }
 
+    /* TAB SYSTEM */
     .tab-content { display:none; }
     .tab-content.active { display:block; }
 
+    /* CARDS */
     .card { background:white; border-radius:16px; padding:1.5rem; border:1px solid var(--border); margin-bottom:1.5rem; }
     .card-title { font-family:'Fraunces',serif; font-size:1.1rem; color:var(--green); margin-bottom:1rem; }
 
-    /* WELCOME TAB */
-    .welcome-hero { background:linear-gradient(135deg, #1e5c3f 0%, #2d7a54 50%, #1a4f35 100%); border-radius:24px; padding:2.5rem; color:white; margin-bottom:1.5rem; position:relative; overflow:hidden; }
-    .welcome-hero::before { content:''; position:absolute; top:-50px; right:-50px; width:200px; height:200px; background:rgba(255,255,255,0.05); border-radius:50%; }
-    .welcome-hero::after { content:''; position:absolute; bottom:-30px; right:80px; width:120px; height:120px; background:rgba(240,180,41,0.1); border-radius:50%; }
-    .welcome-greeting { font-size:0.8rem; font-weight:800; letter-spacing:2px; text-transform:uppercase; color:rgba(255,255,255,0.5); margin-bottom:0.5rem; }
-    .welcome-name { font-family:'Fraunces',serif; font-size:2.2rem; margin-bottom:0.5rem; }
-    .welcome-sub { opacity:0.7; font-size:0.95rem; margin-bottom:1.5rem; }
-    .welcome-btn { display:inline-flex; align-items:center; gap:0.5rem; padding:0.75rem 1.5rem; background:var(--yellow); color:var(--dark); border-radius:50px; font-weight:800; text-decoration:none; font-size:0.9rem; border:none; cursor:pointer; transition:background 0.2s; }
-    .welcome-btn:hover { background:#e0a520; }
+    /* WELCOME */
+    .welcome-hero { background:linear-gradient(135deg, #1a4f35 0%, #1e5c3f 40%, #246b4a 100%); border-radius:22px; padding:2.25rem; color:white; margin-bottom:1.25rem; position:relative; overflow:hidden; }
+    .welcome-hero::before { content:'🇨🇴'; position:absolute; right:2rem; top:50%; transform:translateY(-50%); font-size:5rem; opacity:0.15; }
+    .welcome-greeting { font-size:0.72rem; font-weight:800; letter-spacing:2px; text-transform:uppercase; color:rgba(255,255,255,0.45); margin-bottom:0.4rem; }
+    .welcome-name { font-family:'Fraunces',serif; font-size:2rem; margin-bottom:0.4rem; }
+    .welcome-sub { opacity:0.65; font-size:0.9rem; margin-bottom:1.25rem; }
+    .btn-yellow { display:inline-flex; align-items:center; gap:0.4rem; padding:0.7rem 1.4rem; background:var(--yellow); color:var(--dark); border-radius:50px; font-weight:800; text-decoration:none; font-size:0.875rem; border:none; cursor:pointer; transition:background 0.2s; }
+    .btn-yellow:hover { background:#e0a520; }
 
-    .slang-card { background:linear-gradient(135deg, #d4621a, #e07a30); border-radius:20px; padding:1.5rem; color:white; margin-bottom:1.5rem; }
-    .slang-label { font-size:0.7rem; font-weight:800; letter-spacing:2px; text-transform:uppercase; opacity:0.7; margin-bottom:0.5rem; }
-    .slang-word { font-family:'Fraunces',serif; font-size:2rem; margin-bottom:0.25rem; }
-    .slang-meaning { font-size:0.95rem; opacity:0.9; margin-bottom:0.5rem; }
-    .slang-example { font-size:0.85rem; opacity:0.7; font-style:italic; }
+    .quick-stats { display:grid; grid-template-columns:repeat(3,1fr); gap:1rem; margin-bottom:1.25rem; }
+    .stat-card { background:white; border-radius:14px; padding:1.1rem 1.25rem; border:1px solid var(--border); }
+    .stat-number { font-family:'Fraunces',serif; font-size:1.9rem; color:var(--green); font-weight:700; line-height:1; }
+    .stat-label { font-size:0.72rem; color:var(--text-muted); font-weight:700; margin-top:0.3rem; text-transform:uppercase; letter-spacing:1px; }
 
-    .quick-stats { display:grid; grid-template-columns:repeat(3,1fr); gap:1rem; margin-bottom:1.5rem; }
-    .stat-card { background:white; border-radius:16px; padding:1.25rem; border:1px solid var(--border); text-align:center; }
-    .stat-number { font-family:'Fraunces',serif; font-size:2rem; color:var(--green); font-weight:700; }
-    .stat-label { font-size:0.75rem; color:var(--text-muted); font-weight:600; margin-top:0.25rem; text-transform:uppercase; letter-spacing:1px; }
+    .slang-card { background:linear-gradient(135deg, #c45a17, #d4621a, #e07535); border-radius:18px; padding:1.5rem; color:white; margin-bottom:1.25rem; }
+    .slang-label { font-size:0.68rem; font-weight:800; letter-spacing:2px; text-transform:uppercase; opacity:0.65; margin-bottom:0.4rem; }
+    .slang-word { font-family:'Fraunces',serif; font-size:1.9rem; margin-bottom:0.25rem; }
+    .slang-meaning { font-size:0.9rem; opacity:0.85; margin-bottom:0.35rem; font-weight:500; }
+    .slang-example { font-size:0.82rem; opacity:0.65; font-style:italic; }
 
-    .quick-links { display:grid; grid-template-columns:repeat(2,1fr); gap:1rem; margin-bottom:1.5rem; }
-    .quick-link-card { background:white; border-radius:16px; padding:1.25rem; border:1px solid var(--border); cursor:pointer; transition:all 0.15s; text-decoration:none; display:flex; align-items:center; gap:1rem; }
-    .quick-link-card:hover { transform:translateY(-2px); box-shadow:0 6px 20px rgba(0,0,0,0.08); border-color:var(--green); }
-    .quick-link-icon { width:44px; height:44px; border-radius:12px; background:var(--cream); display:flex; align-items:center; justify-content:center; font-size:1.3rem; flex-shrink:0; }
-    .quick-link-title { font-weight:700; font-size:0.9rem; color:var(--text); }
-    .quick-link-desc { font-size:0.75rem; color:var(--text-muted); margin-top:0.2rem; }
+    .quick-links { display:grid; grid-template-columns:repeat(2,1fr); gap:1rem; }
+    .quick-link-card { background:white; border-radius:14px; padding:1.1rem; border:1px solid var(--border); cursor:pointer; transition:all 0.15s; text-decoration:none; display:flex; align-items:center; gap:0.9rem; }
+    .quick-link-card:hover { transform:translateY(-2px); box-shadow:0 5px 18px rgba(0,0,0,0.07); border-color:rgba(30,92,63,0.25); }
+    .quick-link-icon { width:42px; height:42px; border-radius:11px; background:var(--cream); display:flex; align-items:center; justify-content:center; font-size:1.2rem; flex-shrink:0; }
+    .quick-link-title { font-weight:700; font-size:0.875rem; color:var(--text); }
+    .quick-link-desc { font-size:0.73rem; color:var(--text-muted); margin-top:0.15rem; }
 
     /* PURCHASES */
-    .purchase-item { display:flex; align-items:center; justify-content:space-between; padding:1rem; background:var(--cream); border-radius:12px; margin-bottom:0.75rem; }
-    .purchase-item:last-child { margin-bottom:0; }
-    .purchase-name { font-weight:600; font-size:0.9rem; }
-    .purchase-date { font-size:0.75rem; color:var(--text-muted); margin-top:0.2rem; }
-    .purchase-amount { font-weight:800; color:var(--green); font-size:1rem; }
-    .purchase-badge { display:inline-block; padding:0.2rem 0.6rem; border-radius:20px; font-size:0.7rem; font-weight:700; background:#e8f5ee; color:var(--green); margin-top:0.3rem; }
+    .purchase-item { display:flex; align-items:center; justify-content:space-between; padding:1rem 1.1rem; background:var(--cream); border-radius:12px; margin-bottom:0.65rem; }
+    .purchase-name { font-weight:600; font-size:0.875rem; }
+    .purchase-date { font-size:0.72rem; color:var(--text-muted); margin-top:0.15rem; }
+    .purchase-amount { font-weight:800; color:var(--green); }
+    .purchase-badge { display:inline-block; padding:0.18rem 0.55rem; border-radius:20px; font-size:0.68rem; font-weight:700; background:#dff0e8; color:var(--green); margin-top:0.25rem; }
 
-    .empty-state { text-align:center; padding:3rem 1rem; color:var(--text-muted); }
-    .empty-state .emoji { font-size:2.5rem; margin-bottom:0.75rem; }
-    .empty-state h3 { font-family:'Fraunces',serif; color:var(--text); margin-bottom:0.5rem; }
+    /* BOOKING */
+    .booking-tabs { display:flex; gap:0.5rem; margin-bottom:1.25rem; flex-wrap:wrap; }
+    .booking-tab { padding:0.55rem 1.1rem; border-radius:50px; font-size:0.8rem; font-weight:700; cursor:pointer; border:2px solid var(--border); background:white; color:var(--text-muted); transition:all 0.15s; }
+    .booking-tab.active { background:var(--green); color:white; border-color:var(--green); }
+    .calendly-wrap { border-radius:14px; overflow:hidden; border:1px solid var(--border); }
+    .calendly-wrap iframe { width:100%; height:650px; border:none; display:block; }
+    .no-credits-overlay { background:var(--cream); border-radius:14px; padding:2.5rem; text-align:center; border:2px dashed var(--border); }
+    .no-credits-overlay h3 { font-family:'Fraunces',serif; color:var(--green); font-size:1.2rem; margin-bottom:0.5rem; }
+    .no-credits-overlay p { color:var(--text-muted); font-size:0.875rem; margin-bottom:1.25rem; }
 
-    .calendly-wrap iframe { width:100%; height:650px; border:none; border-radius:12px; }
+    /* FILES */
+    .file-item { display:flex; align-items:center; gap:1rem; padding:0.9rem 1rem; background:var(--cream); border-radius:12px; margin-bottom:0.65rem; }
+    .file-icon { width:38px; height:38px; background:var(--orange); border-radius:9px; display:flex; align-items:center; justify-content:center; color:white; font-size:1rem; flex-shrink:0; }
+    .file-name { font-weight:600; font-size:0.875rem; }
+    .file-meta { font-size:0.72rem; color:var(--text-muted); margin-top:0.15rem; }
+    .file-download { margin-left:auto; padding:0.35rem 0.8rem; background:var(--green); color:white; border-radius:20px; font-size:0.72rem; font-weight:700; text-decoration:none; flex-shrink:0; }
 
-    .file-item { display:flex; align-items:center; gap:1rem; padding:1rem; background:var(--cream); border-radius:12px; margin-bottom:0.75rem; }
-    .file-icon { width:40px; height:40px; background:var(--orange); border-radius:10px; display:flex; align-items:center; justify-content:center; color:white; font-size:1.1rem; flex-shrink:0; }
-    .file-name { font-weight:600; font-size:0.9rem; }
-    .file-meta { font-size:0.75rem; color:var(--text-muted); margin-top:0.2rem; }
-    .file-download { margin-left:auto; padding:0.4rem 0.9rem; background:var(--green); color:white; border-radius:20px; font-size:0.75rem; font-weight:700; text-decoration:none; flex-shrink:0; }
-
-    .video-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:1.25rem; }
-    .video-card { background:white; border-radius:16px; overflow:hidden; border:1px solid var(--border); transition:transform 0.2s,box-shadow 0.2s; }
-    .video-card:hover { transform:translateY(-2px); box-shadow:0 8px 24px rgba(0,0,0,0.08); }
+    /* VIDEOS */
+    .video-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:1rem; }
+    .video-card { background:white; border-radius:14px; overflow:hidden; border:1px solid var(--border); transition:transform 0.2s,box-shadow 0.2s; }
+    .video-card:hover { transform:translateY(-2px); box-shadow:0 6px 20px rgba(0,0,0,0.07); }
     .video-thumb { width:100%; aspect-ratio:16/9; background:#000; }
-    .video-thumb iframe { width:100%; height:100%; border:none; }
-    .video-info { padding:1rem; }
-    .video-title { font-weight:700; font-size:0.9rem; margin-bottom:0.3rem; }
-    .video-desc { font-size:0.8rem; color:var(--text-muted); line-height:1.5; }
-    .video-tag { display:inline-block; padding:0.2rem 0.6rem; border-radius:20px; font-size:0.7rem; font-weight:700; background:#fff3e0; color:var(--orange); margin-top:0.5rem; }
+    .video-thumb iframe { width:100%; height:100%; border:none; display:block; }
+    .video-info { padding:0.9rem; }
+    .video-title { font-weight:700; font-size:0.875rem; margin-bottom:0.25rem; }
+    .video-desc { font-size:0.78rem; color:var(--text-muted); line-height:1.5; }
+    .video-tag { display:inline-block; padding:0.18rem 0.55rem; border-radius:20px; font-size:0.68rem; font-weight:700; background:#fff3e0; color:var(--orange); margin-top:0.4rem; }
+    .vimeo-link-card { background:var(--cream); border-radius:12px; padding:1.1rem; border:1px solid var(--border); display:flex; align-items:center; gap:1rem; margin-bottom:1rem; }
+    .vimeo-link-card a { color:var(--green); font-weight:700; font-size:0.875rem; text-decoration:none; }
+    .vimeo-link-card a:hover { text-decoration:underline; }
 
-    .resource-section { margin-bottom:2rem; }
-    .resource-section-title { font-size:0.75rem; font-weight:800; letter-spacing:2px; text-transform:uppercase; color:var(--orange); margin-bottom:1rem; }
-    .resource-item { display:flex; align-items:center; gap:1rem; padding:1rem; background:var(--cream); border-radius:12px; margin-bottom:0.75rem; }
-    .resource-icon { width:40px; height:40px; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:1.1rem; flex-shrink:0; }
-    .resource-name { font-weight:600; font-size:0.9rem; }
-    .resource-desc { font-size:0.75rem; color:var(--text-muted); margin-top:0.2rem; }
-    .resource-link { margin-left:auto; padding:0.4rem 0.9rem; background:var(--green); color:white; border-radius:20px; font-size:0.75rem; font-weight:700; text-decoration:none; flex-shrink:0; }
+    /* RESOURCES */
+    .resource-section { margin-bottom:1.75rem; }
+    .resource-section-title { font-size:0.68rem; font-weight:800; letter-spacing:2px; text-transform:uppercase; color:var(--orange); margin-bottom:0.75rem; }
+    .resource-item { display:flex; align-items:center; gap:1rem; padding:0.9rem 1rem; background:var(--cream); border-radius:12px; margin-bottom:0.65rem; }
+    .resource-icon { width:38px; height:38px; border-radius:9px; display:flex; align-items:center; justify-content:center; font-size:1rem; flex-shrink:0; }
+    .resource-name { font-weight:600; font-size:0.875rem; }
+    .resource-desc { font-size:0.72rem; color:var(--text-muted); margin-top:0.15rem; }
+    .resource-link { margin-left:auto; padding:0.35rem 0.8rem; background:var(--green); color:white; border-radius:20px; font-size:0.72rem; font-weight:700; text-decoration:none; flex-shrink:0; }
 
-    .loading { display:flex; align-items:center; justify-content:center; padding:3rem; }
-    .spinner { width:32px; height:32px; border:3px solid var(--border); border-top-color:var(--green); border-radius:50%; animation:spin 0.8s linear infinite; }
+    /* PROFILE */
+    .profile-section { margin-bottom:1.5rem; }
+    .profile-field { margin-bottom:1rem; }
+    .profile-label { font-size:0.75rem; font-weight:700; color:var(--text-muted); text-transform:uppercase; letter-spacing:1px; margin-bottom:0.4rem; }
+    .profile-input { width:100%; padding:0.75rem 1rem; background:var(--cream); border:1px solid var(--border); border-radius:10px; font-family:'Plus Jakarta Sans',sans-serif; font-size:0.9rem; color:var(--text); outline:none; transition:border-color 0.15s; }
+    .profile-input:focus { border-color:var(--green); background:white; }
+    .btn-save { padding:0.75rem 1.75rem; background:var(--green); color:white; border-radius:50px; font-weight:700; font-size:0.875rem; border:none; cursor:pointer; transition:background 0.2s; }
+    .btn-save:hover { background:var(--green-light); }
+    .profile-msg { font-size:0.8rem; margin-top:0.5rem; }
+    .profile-msg.success { color:var(--green); }
+    .profile-msg.error { color:var(--orange); }
+
+    /* ADMIN */
+    .admin-section { margin-bottom:2rem; }
+    .admin-title { font-family:'Fraunces',serif; font-size:1rem; color:var(--green); margin-bottom:1rem; padding-bottom:0.5rem; border-bottom:1px solid var(--border); }
+    .admin-form { background:var(--cream); border-radius:14px; padding:1.25rem; }
+    .admin-field { margin-bottom:0.9rem; }
+    .admin-label { font-size:0.72rem; font-weight:700; color:var(--text-muted); text-transform:uppercase; letter-spacing:1px; display:block; margin-bottom:0.35rem; }
+    .admin-input { width:100%; padding:0.65rem 0.9rem; background:white; border:1px solid var(--border); border-radius:9px; font-family:'Plus Jakarta Sans',sans-serif; font-size:0.875rem; color:var(--text); outline:none; transition:border-color 0.15s; }
+    .admin-input:focus { border-color:var(--green); }
+    .admin-select { width:100%; padding:0.65rem 0.9rem; background:white; border:1px solid var(--border); border-radius:9px; font-family:'Plus Jakarta Sans',sans-serif; font-size:0.875rem; color:var(--text); outline:none; }
+    .btn-admin { padding:0.65rem 1.5rem; background:var(--green); color:white; border-radius:50px; font-weight:700; font-size:0.8rem; border:none; cursor:pointer; transition:background 0.2s; }
+    .btn-admin:hover { background:var(--green-light); }
+    .admin-msg { font-size:0.78rem; margin-top:0.5rem; color:var(--green); }
+
+    /* EMPTY */
+    .empty-state { text-align:center; padding:2.5rem 1rem; color:var(--text-muted); }
+    .empty-state .emoji { font-size:2.2rem; margin-bottom:0.6rem; }
+    .empty-state h3 { font-family:'Fraunces',serif; color:var(--text); margin-bottom:0.4rem; font-size:1rem; }
+    .empty-state p { font-size:0.85rem; }
+
+    /* LOADING */
+    .loading { display:flex; align-items:center; justify-content:center; padding:2.5rem; }
+    .spinner { width:28px; height:28px; border:3px solid var(--border); border-top-color:var(--green); border-radius:50%; animation:spin 0.8s linear infinite; }
     @keyframes spin { to { transform:rotate(360deg); } }
+
+    /* ADMIN BADGE */
+    .admin-badge { display:inline-block; padding:0.15rem 0.5rem; background:var(--yellow); color:var(--dark); border-radius:20px; font-size:0.65rem; font-weight:800; margin-left:0.4rem; letter-spacing:0.5px; }
 
     @media (max-width: 768px) {
       .sidebar { transform:translateX(-100%); }
       .main { margin-left:0; }
       .content { padding:1rem; }
-      .video-grid { grid-template-columns:1fr; }
       .quick-stats { grid-template-columns:repeat(2,1fr); }
       .quick-links { grid-template-columns:1fr; }
+      .video-grid { grid-template-columns:1fr; }
     }
   </style>
 </head>
 <body>
 
+<!-- AUTH GATE -->
 <div id="auth-gate">
   <div class="auth-gate-card">
     <div style="font-size:2.5rem;margin-bottom:1rem;">🔐</div>
@@ -157,17 +208,19 @@
   </div>
 </div>
 
+<!-- APP -->
 <div id="app">
   <div class="layout">
     <aside class="sidebar">
       <div class="sidebar-logo">
-        <a href="/"><span>Parcháte<span class="logo-sub">en Spanish</span></span></a>
+        <img src="https://raw.githubusercontent.com/hayaluj/parchatespanish/main/logo.png" onerror="this.style.display='none'" alt="Logo">
+        <div class="sidebar-logo-text">Parcháte<span class="logo-sub">en Spanish</span></div>
       </div>
       <div class="sidebar-user">
         <div class="user-info">
           <div class="user-avatar" id="user-avatar">?</div>
           <div>
-            <div class="user-name" id="user-name">Loading...</div>
+            <div class="user-name" id="user-name">...</div>
             <div class="user-email" id="user-email"></div>
           </div>
         </div>
@@ -180,6 +233,11 @@
         <a class="nav-item" data-tab="notes" onclick="switchTab('notes')"><span class="nav-icon">📝</span> Teacher Notes</a>
         <a class="nav-item" data-tab="videos" onclick="switchTab('videos')"><span class="nav-icon">🎥</span> Video Library</a>
         <a class="nav-item" data-tab="resources" onclick="switchTab('resources')"><span class="nav-icon">📚</span> Our Resources</a>
+        <a class="nav-item" data-tab="profile" onclick="switchTab('profile')"><span class="nav-icon">👤</span> My Profile</a>
+        <div id="admin-nav" style="display:none;">
+          <div class="nav-label">Admin<span class="admin-badge">ADMIN</span></div>
+          <a class="nav-item" data-tab="admin" onclick="switchTab('admin')"><span class="nav-icon">⚙️</span> Admin Panel</a>
+        </div>
       </nav>
       <div class="sidebar-footer">
         <button class="btn-logout" onclick="signOut()">↩ Sign out</button>
@@ -193,66 +251,30 @@
       </div>
       <div class="content">
 
-        <!-- WELCOME TAB -->
+        <!-- HOME TAB -->
         <div class="tab-content active" id="tab-welcome">
           <div class="welcome-hero">
             <div class="welcome-greeting">Learning Hub</div>
-            <div class="welcome-name" id="welcome-name">¡Bienvenido de vuelta!</div>
+            <div class="welcome-name" id="welcome-name">¡Bienvenido!</div>
             <div class="welcome-sub">Ready to keep leveling up your Colombian Spanish? 🇨🇴</div>
-            <button class="welcome-btn" onclick="switchTab('booking')">📅 Book your next class</button>
+            <button class="btn-yellow" onclick="switchTab('booking')">📅 Book your next class</button>
           </div>
-
           <div class="quick-stats">
-            <div class="stat-card">
-              <div class="stat-number" id="stat-purchases">—</div>
-              <div class="stat-label">Purchases</div>
-            </div>
-            <div class="stat-card">
-              <div class="stat-number" id="stat-notes">—</div>
-              <div class="stat-label">Class Notes</div>
-            </div>
-            <div class="stat-card">
-              <div class="stat-number" id="stat-videos">—</div>
-              <div class="stat-label">Videos</div>
-            </div>
+            <div class="stat-card"><div class="stat-number" id="stat-purchases">—</div><div class="stat-label">Purchases</div></div>
+            <div class="stat-card"><div class="stat-number" id="stat-notes">—</div><div class="stat-label">Class Notes</div></div>
+            <div class="stat-card"><div class="stat-number" id="stat-videos">—</div><div class="stat-label">Videos</div></div>
           </div>
-
-          <div class="slang-card" id="slang-card">
-            <div class="slang-label">🇨🇴 Colombian Slang of the Day</div>
+          <div class="slang-card">
+            <div class="slang-label">🇨🇴 Colombian Word of the Day</div>
             <div class="slang-word" id="slang-word">Loading...</div>
             <div class="slang-meaning" id="slang-meaning"></div>
             <div class="slang-example" id="slang-example"></div>
           </div>
-
           <div class="quick-links">
-            <a class="quick-link-card" onclick="switchTab('booking')">
-              <div class="quick-link-icon">📅</div>
-              <div>
-                <div class="quick-link-title">Book a Lesson</div>
-                <div class="quick-link-desc">Schedule your next class with a teacher</div>
-              </div>
-            </a>
-            <a class="quick-link-card" onclick="switchTab('notes')">
-              <div class="quick-link-icon">📝</div>
-              <div>
-                <div class="quick-link-title">Teacher Notes</div>
-                <div class="quick-link-desc">Review materials from your classes</div>
-              </div>
-            </a>
-            <a class="quick-link-card" onclick="switchTab('videos')">
-              <div class="quick-link-icon">🎥</div>
-              <div>
-                <div class="quick-link-title">Video Library</div>
-                <div class="quick-link-desc">Culture and slang videos by our teachers</div>
-              </div>
-            </a>
-            <a class="quick-link-card" onclick="switchTab('resources')">
-              <div class="quick-link-icon">📚</div>
-              <div>
-                <div class="quick-link-title">Our Resources</div>
-                <div class="quick-link-desc">Textbooks, guides, and recommendations</div>
-              </div>
-            </a>
+            <a class="quick-link-card" onclick="switchTab('booking')"><div class="quick-link-icon">📅</div><div><div class="quick-link-title">Book a Lesson</div><div class="quick-link-desc">Schedule your next class</div></div></a>
+            <a class="quick-link-card" onclick="switchTab('notes')"><div class="quick-link-icon">📝</div><div><div class="quick-link-title">Teacher Notes</div><div class="quick-link-desc">Review your class materials</div></div></a>
+            <a class="quick-link-card" onclick="switchTab('videos')"><div class="quick-link-icon">🎥</div><div><div class="quick-link-title">Video Library</div><div class="quick-link-desc">Culture and slang videos</div></div></a>
+            <a class="quick-link-card" onclick="switchTab('resources')"><div class="quick-link-icon">📚</div><div><div class="quick-link-title">Our Resources</div><div class="quick-link-desc">Textbooks, guides & more</div></div></a>
           </div>
         </div>
 
@@ -268,9 +290,13 @@
         <div class="tab-content" id="tab-booking">
           <div class="card">
             <div class="card-title">📅 Book Your Next Lesson</div>
-            <p style="color:var(--text-muted);font-size:0.9rem;margin-bottom:1.5rem;">Select a time that works for you. Your teacher will confirm within 24 hours.</p>
-            <div class="calendly-wrap">
-              <iframe src="https://calendly.com/parchatespanish-sales/parchate-spanish-individual-class" frameborder="0"></iframe>
+            <div class="booking-tabs">
+              <button class="booking-tab active" onclick="switchCalendly('individual', this)">Individual Lesson</button>
+              <button class="booking-tab" onclick="switchCalendly('group', this)">Group Class (A1)</button>
+              <button class="booking-tab" onclick="switchCalendly('parche', this)">Parche Pack</button>
+            </div>
+            <div id="booking-content">
+              <div class="loading"><div class="spinner"></div></div>
             </div>
           </div>
         </div>
@@ -279,7 +305,7 @@
         <div class="tab-content" id="tab-notes">
           <div class="card">
             <div class="card-title">📝 Your Class Notes</div>
-            <p style="color:var(--text-muted);font-size:0.9rem;margin-bottom:1.5rem;">Notes and materials uploaded by your teacher after each class.</p>
+            <p style="color:var(--text-muted);font-size:0.875rem;margin-bottom:1.25rem;">Notes and materials uploaded by your teacher after each class.</p>
             <div id="notes-list"><div class="loading"><div class="spinner"></div></div></div>
           </div>
         </div>
@@ -288,7 +314,14 @@
         <div class="tab-content" id="tab-videos">
           <div class="card">
             <div class="card-title">🎥 Video Library</div>
-            <p style="color:var(--text-muted);font-size:0.9rem;margin-bottom:1.5rem;">Culture, slang, and language videos from our native Colombian teachers.</p>
+            <div class="vimeo-link-card">
+              <span style="font-size:1.5rem;">🎬</span>
+              <div>
+                <div style="font-weight:700;font-size:0.875rem;margin-bottom:0.2rem;">Our Vimeo Channel</div>
+                <a href="https://vimeo.com/parchatespanish" target="_blank">Watch all our educational videos on Vimeo →</a>
+              </div>
+            </div>
+            <p style="color:var(--text-muted);font-size:0.875rem;margin-bottom:1.25rem;">Culture, slang, and language videos from our native Colombian teachers.</p>
             <div id="videos-list"><div class="loading"><div class="spinner"></div></div></div>
           </div>
         </div>
@@ -297,8 +330,112 @@
         <div class="tab-content" id="tab-resources">
           <div class="card">
             <div class="card-title">📚 Our Resources</div>
-            <p style="color:var(--text-muted);font-size:0.9rem;margin-bottom:1.5rem;">Everything you need to accelerate your Spanish learning.</p>
+            <p style="color:var(--text-muted);font-size:0.875rem;margin-bottom:1.25rem;">Everything you need to accelerate your Spanish learning.</p>
             <div id="resources-list"><div class="loading"><div class="spinner"></div></div></div>
+          </div>
+        </div>
+
+        <!-- PROFILE TAB -->
+        <div class="tab-content" id="tab-profile">
+          <div class="card">
+            <div class="card-title">👤 My Profile</div>
+            <div class="profile-section">
+              <div class="profile-field">
+                <div class="profile-label">Full Name</div>
+                <input class="profile-input" id="profile-name" type="text" placeholder="Your full name">
+              </div>
+              <div class="profile-field">
+                <div class="profile-label">Email Address</div>
+                <input class="profile-input" id="profile-email" type="email" disabled style="opacity:0.6;cursor:not-allowed;">
+                <div style="font-size:0.72rem;color:var(--text-muted);margin-top:0.3rem;">Email cannot be changed here.</div>
+              </div>
+              <button class="btn-save" onclick="saveName()">Save Name</button>
+              <div class="profile-msg" id="name-msg"></div>
+            </div>
+            <hr style="border:none;border-top:1px solid var(--border);margin:1.5rem 0;">
+            <div class="card-title">🔒 Change Password</div>
+            <div class="profile-section">
+              <div class="profile-field">
+                <div class="profile-label">New Password</div>
+                <input class="profile-input" id="new-password" type="password" placeholder="Enter new password">
+              </div>
+              <div class="profile-field">
+                <div class="profile-label">Confirm New Password</div>
+                <input class="profile-input" id="confirm-password" type="password" placeholder="Confirm new password">
+              </div>
+              <button class="btn-save" onclick="changePassword()">Update Password</button>
+              <div class="profile-msg" id="password-msg"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ADMIN TAB -->
+        <div class="tab-content" id="tab-admin">
+          <div class="card">
+            <div class="card-title">⚙️ Admin Panel <span class="admin-badge">ADMIN ONLY</span></div>
+
+            <!-- Upload Teacher Notes -->
+            <div class="admin-section">
+              <div class="admin-title">📝 Upload Class Notes for a Student</div>
+              <div class="admin-form">
+                <div class="admin-field"><label class="admin-label">Student Email</label><input class="admin-input" id="note-student-email" type="email" placeholder="student@email.com"></div>
+                <div class="admin-field"><label class="admin-label">Note Title</label><input class="admin-input" id="note-title" type="text" placeholder="e.g. Class 3 — Verb Tenses"></div>
+                <div class="admin-field"><label class="admin-label">File URL (from Supabase Storage or Google Drive)</label><input class="admin-input" id="note-url" type="url" placeholder="https://..."></div>
+                <div class="admin-field"><label class="admin-label">Teacher Name</label><input class="admin-input" id="note-teacher" type="text" placeholder="Your name"></div>
+                <button class="btn-admin" onclick="uploadNote()">Upload Note</button>
+                <div class="admin-msg" id="note-msg"></div>
+              </div>
+            </div>
+
+            <!-- Add Video -->
+            <div class="admin-section">
+              <div class="admin-title">🎥 Add Video to Library</div>
+              <div class="admin-form">
+                <div class="admin-field"><label class="admin-label">Video Title</label><input class="admin-input" id="video-title" type="text" placeholder="e.g. Colombian Slang: Parcero"></div>
+                <div class="admin-field"><label class="admin-label">YouTube Video ID</label><input class="admin-input" id="video-youtube" type="text" placeholder="e.g. dQw4w9WgXcQ (from youtube.com/watch?v=dQw4w9WgXcQ)"></div>
+                <div class="admin-field"><label class="admin-label">Description</label><input class="admin-input" id="video-desc" type="text" placeholder="Short description..."></div>
+                <div class="admin-field"><label class="admin-label">Category</label>
+                  <select class="admin-select" id="video-category">
+                    <option>Culture</option><option>Slang</option><option>Grammar</option><option>Pronunciation</option><option>Conversation</option>
+                  </select>
+                </div>
+                <div class="admin-field"><label class="admin-label">Teacher Name</label><input class="admin-input" id="video-teacher" type="text" placeholder="Your name"></div>
+                <button class="btn-admin" onclick="uploadVideo()">Add Video</button>
+                <div class="admin-msg" id="video-msg"></div>
+              </div>
+            </div>
+
+            <!-- Add Resource -->
+            <div class="admin-section">
+              <div class="admin-title">📚 Add Resource</div>
+              <div class="admin-form">
+                <div class="admin-field"><label class="admin-label">Title</label><input class="admin-input" id="res-title" type="text" placeholder="e.g. Parcháte Textbook Vol. 1"></div>
+                <div class="admin-field"><label class="admin-label">Category</label>
+                  <select class="admin-select" id="res-category">
+                    <option>Textbooks</option><option>Grammar Guides</option><option>Vocabulary Lists</option><option>Podcasts & Shows</option><option>Other</option>
+                  </select>
+                </div>
+                <div class="admin-field"><label class="admin-label">Description</label><input class="admin-input" id="res-desc" type="text" placeholder="Short description..."></div>
+                <div class="admin-field"><label class="admin-label">URL (link to file or website)</label><input class="admin-input" id="res-url" type="url" placeholder="https://..."></div>
+                <div class="admin-field"><label class="admin-label">Emoji Icon</label><input class="admin-input" id="res-emoji" type="text" placeholder="📘" style="width:80px;"></div>
+                <button class="btn-admin" onclick="uploadResource()">Add Resource</button>
+                <div class="admin-msg" id="res-msg"></div>
+              </div>
+            </div>
+
+            <!-- Word of the Day -->
+            <div class="admin-section">
+              <div class="admin-title">🇨🇴 Schedule Word of the Day</div>
+              <div class="admin-form">
+                <div class="admin-field"><label class="admin-label">Date (YYYY-MM-DD)</label><input class="admin-input" id="wotd-date" type="date"></div>
+                <div class="admin-field"><label class="admin-label">Word / Phrase</label><input class="admin-input" id="wotd-word" type="text" placeholder="e.g. ¡Qué chimba!"></div>
+                <div class="admin-field"><label class="admin-label">Meaning</label><input class="admin-input" id="wotd-meaning" type="text" placeholder="e.g. How awesome!"></div>
+                <div class="admin-field"><label class="admin-label">Example sentence</label><input class="admin-input" id="wotd-example" type="text" placeholder='e.g. "¡Qué chimba!" — That\'s amazing!'></div>
+                <button class="btn-admin" onclick="saveWordOfDay()">Schedule Word</button>
+                <div class="admin-msg" id="wotd-msg"></div>
+              </div>
+            </div>
+
           </div>
         </div>
 
@@ -311,25 +448,38 @@
 const SUPABASE_URL = 'https://xqtpqhjddxalnhrkbnnn.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_0y6Hw4J6ECitfSRVa6Krsg_SHcB_aJR';
 const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-let currentUser = null;
 
-const TAB_TITLES = { welcome:'Home', purchases:'My Purchases', booking:'Book a Lesson', notes:'Teacher Notes', videos:'Video Library', resources:'Our Resources' };
+// Admin emails — add your own and teachers here
+const ADMIN_EMAILS = ['brayan@parchatespanish.com', 'carolina@parchatespanish.com', 'sales@parchatespanish.com'];
 
-const SLANG = [
+const CALENDLY = {
+  individual: 'https://calendly.com/parchatespanish-sales/parchate-spanish-individual-class',
+  group: 'https://calendly.com/parchatespanish-sales/parchate-spanish-group-classes-a1',
+  parche: 'https://calendly.com/parchatespanish-sales/new-meeting'
+};
+
+const FALLBACK_SLANG = [
   { word:'¡Qué chimba!', meaning:'How awesome! / That\'s amazing!', example:'"¡Qué chimba ese parcero!" — That guy is awesome!' },
   { word:'Parce / Parcero', meaning:'Friend, buddy, mate', example:'"Ey parce, ¿qué más?" — Hey buddy, what\'s up?' },
   { word:'Bacano', meaning:'Cool, great, nice', example:'"Ese lugar es muy bacano." — That place is really cool.' },
   { word:'Rumba', meaning:'Party, going out', example:'"¿Vamos a la rumba esta noche?" — Are we going out tonight?' },
-  { word:'Berraco/a', meaning:'Tough, impressive, hardworking', example:'"Ella es muy berraca." — She\'s incredibly tough/impressive.' },
-  { word:'Gonorrea', meaning:'(Slang) Amazing person or thing (context-dependent!)', example:'"Ese man es una gonorrea bailando." — That guy is insane at dancing.' },
-  { word:'Mono/a', meaning:'Blond/fair-skinned person (affectionate)', example:'"Hola mono, ¿cómo estás?" — Hey blondie, how are you?' },
-  { word:'Camello', meaning:'Work, job, hustle', example:'"Tengo mucho camello hoy." — I have a lot of work today.' },
-  { word:'Vaina', meaning:'Thing, stuff, situation', example:'"¿Qué fue esa vaina?" — What was that thing/situation?' },
+  { word:'Berraco/a', meaning:'Tough, impressive, hardworking', example:'"Ella es muy berraca." — She\'s incredibly impressive.' },
+  { word:'Vaina', meaning:'Thing, stuff, situation', example:'"¿Qué fue esa vaina?" — What was that thing?' },
   { word:'Mamera', meaning:'Something boring or annoying', example:'"Qué mamera esta reunión." — This meeting is such a drag.' },
   { word:'Tinto', meaning:'Black coffee (very Colombian!)', example:'"¿Quiere un tinto?" — Do you want a black coffee?' },
   { word:'Chévere', meaning:'Cool, great, awesome', example:'"¡Qué chévere verte!" — So great to see you!' },
+  { word:'Mono/a', meaning:'Blond/fair-skinned (affectionate)', example:'"Hola mono, ¿cómo estás?" — Hey blondie, how are you?' },
+  { word:'Camello', meaning:'Work, job, hustle', example:'"Tengo mucho camello hoy." — I have a lot of work today.' },
+  { word:'Gonorrea', meaning:'Impressive person (informal, context-dependent!)', example:'"Ese man baila una gonorrea." — That guy dances amazingly.' },
 ];
 
+const TAB_TITLES = { welcome:'Home', purchases:'My Purchases', booking:'Book a Lesson', notes:'Teacher Notes', videos:'Video Library', resources:'Our Resources', profile:'My Profile', admin:'Admin Panel' };
+
+let currentUser = null;
+let userPurchases = 0;
+let currentCalendly = 'individual';
+
+// ── AUTH ──────────────────────────────────────────────────
 sb.auth.onAuthStateChange(async (event, session) => {
   if (session?.user) { currentUser = session.user; showApp(); }
   else { showAuthGate(); }
@@ -339,11 +489,15 @@ function showApp() {
   document.getElementById('auth-gate').style.display = 'none';
   document.getElementById('app').style.display = 'block';
   const email = currentUser.email || '';
-  const name = email.split('@')[0];
-  document.getElementById('user-avatar').textContent = email.slice(0,2).toUpperCase();
+  const meta = currentUser.user_metadata || {};
+  const name = meta.full_name || meta.name || email.split('@')[0];
+  document.getElementById('user-avatar').textContent = name.slice(0,2).toUpperCase();
   document.getElementById('user-name').textContent = name;
   document.getElementById('user-email').textContent = email;
-  document.getElementById('welcome-name').textContent = `¡Bienvenido de vuelta, ${name}!`;
+  document.getElementById('welcome-name').textContent = `¡Bienvenido de vuelta, ${name.split(' ')[0]}!`;
+  document.getElementById('profile-name').value = meta.full_name || meta.name || '';
+  document.getElementById('profile-email').value = email;
+  if (ADMIN_EMAILS.includes(email)) document.getElementById('admin-nav').style.display = 'block';
   loadSlang();
   loadStats();
   loadPurchases();
@@ -356,36 +510,44 @@ function showAuthGate() {
 
 async function signOut() { await sb.auth.signOut(); window.location.href = '/'; }
 
+// ── TABS ──────────────────────────────────────────────────
 function switchTab(tab) {
   document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
   document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
   document.getElementById('tab-' + tab).classList.add('active');
-  document.querySelector(`[data-tab="${tab}"]`).classList.add('active');
-  document.getElementById('page-title').textContent = TAB_TITLES[tab];
+  const navEl = document.querySelector(`[data-tab="${tab}"]`);
+  if (navEl) navEl.classList.add('active');
+  document.getElementById('page-title').textContent = TAB_TITLES[tab] || tab;
+  if (tab === 'booking') loadBooking();
   if (tab === 'notes') loadNotes();
   if (tab === 'videos') loadVideos();
   if (tab === 'resources') loadResources();
 }
 
-function loadSlang() {
-  const today = new Date().getDay();
-  const s = SLANG[today % SLANG.length];
+// ── SLANG OF THE DAY ──────────────────────────────────────
+async function loadSlang() {
+  const today = new Date().toISOString().split('T')[0];
+  const { data } = await sb.from('word_of_day').select('*').eq('date', today).single();
+  const s = data || FALLBACK_SLANG[new Date().getDay() % FALLBACK_SLANG.length];
   document.getElementById('slang-word').textContent = s.word;
   document.getElementById('slang-meaning').textContent = s.meaning;
-  document.getElementById('slang-example').textContent = s.example;
+  document.getElementById('slang-example').textContent = s.example || '';
 }
 
+// ── STATS ─────────────────────────────────────────────────
 async function loadStats() {
-  const [purchases, notes, videos] = await Promise.all([
+  const [p, n, v] = await Promise.all([
     sb.from('purchases').select('id', {count:'exact'}).eq('stripe_customer_email', currentUser.email),
     sb.from('student_notes').select('id', {count:'exact'}).eq('student_email', currentUser.email),
     sb.from('videos').select('id', {count:'exact'}).eq('is_published', true)
   ]);
-  document.getElementById('stat-purchases').textContent = purchases.count ?? 0;
-  document.getElementById('stat-notes').textContent = notes.count ?? 0;
-  document.getElementById('stat-videos').textContent = videos.count ?? 0;
+  userPurchases = p.count || 0;
+  document.getElementById('stat-purchases').textContent = p.count ?? 0;
+  document.getElementById('stat-notes').textContent = n.count ?? 0;
+  document.getElementById('stat-videos').textContent = v.count ?? 0;
 }
 
+// ── PURCHASES ────────────────────────────────────────────
 async function loadPurchases() {
   const { data } = await sb.from('purchases').select('*').eq('stripe_customer_email', currentUser.email).order('created_at', { ascending: false });
   const container = document.getElementById('purchases-list');
@@ -397,7 +559,7 @@ async function loadPurchases() {
   container.innerHTML = data.map(p => `
     <div class="purchase-item">
       <div>
-        <div class="purchase-name">${names[p.product_type] || p.product_type}</div>
+        <div class="purchase-name">${names[p.product_type]||p.product_type}</div>
         <div class="purchase-date">${new Date(p.created_at).toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'})}</div>
         <span class="purchase-badge">✓ Paid</span>
       </div>
@@ -405,6 +567,37 @@ async function loadPurchases() {
     </div>`).join('');
 }
 
+// ── BOOKING ───────────────────────────────────────────────
+function loadBooking() {
+  renderCalendly(currentCalendly);
+}
+
+function switchCalendly(type, btn) {
+  currentCalendly = type;
+  document.querySelectorAll('.booking-tab').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderCalendly(type);
+}
+
+function renderCalendly(type) {
+  const container = document.getElementById('booking-content');
+  if (userPurchases === 0) {
+    container.innerHTML = `
+      <div class="no-credits-overlay">
+        <div style="font-size:2rem;margin-bottom:0.75rem;">📅</div>
+        <h3>No credits yet</h3>
+        <p>You haven't purchased any lessons yet. Buy a pack to book your first class!</p>
+        <a href="/#prices" class="btn-yellow" style="margin-top:0.5rem;">Browse lesson packages →</a>
+        <div style="margin-top:1.5rem;opacity:0.5;pointer-events:none;filter:blur(3px);">
+          <iframe src="${CALENDLY[type]}" width="100%" height="400" frameborder="0"></iframe>
+        </div>
+      </div>`;
+  } else {
+    container.innerHTML = `<div class="calendly-wrap"><iframe src="${CALENDLY[type]}" frameborder="0"></iframe></div>`;
+  }
+}
+
+// ── NOTES ─────────────────────────────────────────────────
 async function loadNotes() {
   const container = document.getElementById('notes-list');
   if (container.dataset.loaded) return;
@@ -415,13 +608,14 @@ async function loadNotes() {
     container.innerHTML = data.map(n => `
       <div class="file-item">
         <div class="file-icon">📄</div>
-        <div><div class="file-name">${n.title}</div><div class="file-meta">Uploaded ${new Date(n.created_at).toLocaleDateString('en-GB',{day:'numeric',month:'long'})} · ${n.teacher_name||'Your teacher'}</div></div>
+        <div><div class="file-name">${n.title}</div><div class="file-meta">By ${n.teacher_name||'Your teacher'} · ${new Date(n.created_at).toLocaleDateString('en-GB',{day:'numeric',month:'long'})}</div></div>
         <a href="${n.file_url}" target="_blank" class="file-download">Download</a>
       </div>`).join('');
   }
   container.dataset.loaded = true;
 }
 
+// ── VIDEOS ────────────────────────────────────────────────
 async function loadVideos() {
   const container = document.getElementById('videos-list');
   if (container.dataset.loaded) return;
@@ -432,16 +626,13 @@ async function loadVideos() {
     container.innerHTML = `<div class="video-grid">${data.map(v => `
       <div class="video-card">
         <div class="video-thumb"><iframe src="https://www.youtube.com/embed/${v.youtube_id}" allowfullscreen></iframe></div>
-        <div class="video-info">
-          <div class="video-title">${v.title}</div>
-          <div class="video-desc">${v.description||''}</div>
-          <span class="video-tag">${v.category||'Culture'}</span>
-        </div>
+        <div class="video-info"><div class="video-title">${v.title}</div><div class="video-desc">${v.description||''}</div><span class="video-tag">${v.category||'Culture'}</span></div>
       </div>`).join('')}</div>`;
   }
   container.dataset.loaded = true;
 }
 
+// ── RESOURCES ─────────────────────────────────────────────
 async function loadResources() {
   const container = document.getElementById('resources-list');
   if (container.dataset.loaded) return;
@@ -450,10 +641,7 @@ async function loadResources() {
     container.innerHTML = ['Grammar Guides','Vocabulary Lists','Textbooks','Podcasts & Shows'].map(cat => `
       <div class="resource-section">
         <div class="resource-section-title">${cat}</div>
-        <div class="resource-item">
-          <div class="resource-icon" style="background:#e8f5ee;">📄</div>
-          <div><div class="resource-name">Coming soon</div><div class="resource-desc">Content will be added here shortly</div></div>
-        </div>
+        <div class="resource-item"><div class="resource-icon" style="background:#e8f0e4;">📄</div><div><div class="resource-name">Coming soon</div><div class="resource-desc">Content will be added here shortly</div></div></div>
       </div>`).join('');
   } else {
     const grouped = data.reduce((acc,r) => { if(!acc[r.category])acc[r.category]=[]; acc[r.category].push(r); return acc; }, {});
@@ -462,13 +650,90 @@ async function loadResources() {
         <div class="resource-section-title">${cat}</div>
         ${items.map(r => `
           <div class="resource-item">
-            <div class="resource-icon" style="background:#e8f5ee;">${r.emoji||'📄'}</div>
+            <div class="resource-icon" style="background:#e8f0e4;">${r.emoji||'📄'}</div>
             <div><div class="resource-name">${r.title}</div><div class="resource-desc">${r.description||''}</div></div>
             ${r.url?`<a href="${r.url}" target="_blank" class="resource-link">Open</a>`:''}
           </div>`).join('')}
       </div>`).join('');
   }
   container.dataset.loaded = true;
+}
+
+// ── PROFILE ───────────────────────────────────────────────
+async function saveName() {
+  const name = document.getElementById('profile-name').value.trim();
+  const msg = document.getElementById('name-msg');
+  if (!name) { msg.textContent = 'Please enter a name.'; msg.className = 'profile-msg error'; return; }
+  const { error } = await sb.auth.updateUser({ data: { full_name: name } });
+  if (error) { msg.textContent = error.message; msg.className = 'profile-msg error'; }
+  else {
+    msg.textContent = 'Name updated!'; msg.className = 'profile-msg success';
+    document.getElementById('user-name').textContent = name;
+    document.getElementById('welcome-name').textContent = `¡Bienvenido de vuelta, ${name.split(' ')[0]}!`;
+    document.getElementById('user-avatar').textContent = name.slice(0,2).toUpperCase();
+  }
+}
+
+async function changePassword() {
+  const pw = document.getElementById('new-password').value;
+  const confirm = document.getElementById('confirm-password').value;
+  const msg = document.getElementById('password-msg');
+  if (!pw || pw.length < 6) { msg.textContent = 'Password must be at least 6 characters.'; msg.className = 'profile-msg error'; return; }
+  if (pw !== confirm) { msg.textContent = 'Passwords don\'t match.'; msg.className = 'profile-msg error'; return; }
+  const { error } = await sb.auth.updateUser({ password: pw });
+  if (error) { msg.textContent = error.message; msg.className = 'profile-msg error'; }
+  else { msg.textContent = 'Password updated!'; msg.className = 'profile-msg success'; document.getElementById('new-password').value=''; document.getElementById('confirm-password').value=''; }
+}
+
+// ── ADMIN ─────────────────────────────────────────────────
+async function uploadNote() {
+  const email = document.getElementById('note-student-email').value.trim();
+  const title = document.getElementById('note-title').value.trim();
+  const url = document.getElementById('note-url').value.trim();
+  const teacher = document.getElementById('note-teacher').value.trim();
+  const msg = document.getElementById('note-msg');
+  if (!email||!title||!url) { msg.textContent = 'Please fill in all required fields.'; return; }
+  const { error } = await sb.from('student_notes').insert({ student_email:email, title, file_url:url, teacher_name:teacher });
+  if (error) { msg.textContent = 'Error: ' + error.message; }
+  else { msg.textContent = '✓ Note uploaded successfully!'; document.getElementById('note-student-email').value=''; document.getElementById('note-title').value=''; document.getElementById('note-url').value=''; }
+}
+
+async function uploadVideo() {
+  const title = document.getElementById('video-title').value.trim();
+  const youtube_id = document.getElementById('video-youtube').value.trim();
+  const description = document.getElementById('video-desc').value.trim();
+  const category = document.getElementById('video-category').value;
+  const teacher_name = document.getElementById('video-teacher').value.trim();
+  const msg = document.getElementById('video-msg');
+  if (!title||!youtube_id) { msg.textContent = 'Please fill in title and YouTube ID.'; return; }
+  const { error } = await sb.from('videos').insert({ title, youtube_id, description, category, teacher_name, is_published:true });
+  if (error) { msg.textContent = 'Error: ' + error.message; }
+  else { msg.textContent = '✓ Video added!'; document.getElementById('video-title').value=''; document.getElementById('video-youtube').value=''; document.getElementById('video-desc').value=''; }
+}
+
+async function uploadResource() {
+  const title = document.getElementById('res-title').value.trim();
+  const category = document.getElementById('res-category').value;
+  const description = document.getElementById('res-desc').value.trim();
+  const url = document.getElementById('res-url').value.trim();
+  const emoji = document.getElementById('res-emoji').value.trim() || '📄';
+  const msg = document.getElementById('res-msg');
+  if (!title) { msg.textContent = 'Please enter a title.'; return; }
+  const { error } = await sb.from('resources').insert({ title, category, description, url, emoji, is_published:true });
+  if (error) { msg.textContent = 'Error: ' + error.message; }
+  else { msg.textContent = '✓ Resource added!'; document.getElementById('res-title').value=''; document.getElementById('res-desc').value=''; document.getElementById('res-url').value=''; }
+}
+
+async function saveWordOfDay() {
+  const date = document.getElementById('wotd-date').value;
+  const word = document.getElementById('wotd-word').value.trim();
+  const meaning = document.getElementById('wotd-meaning').value.trim();
+  const example = document.getElementById('wotd-example').value.trim();
+  const msg = document.getElementById('wotd-msg');
+  if (!date||!word||!meaning) { msg.textContent = 'Please fill in date, word and meaning.'; return; }
+  const { error } = await sb.from('word_of_day').upsert({ date, word, meaning, example }, { onConflict:'date' });
+  if (error) { msg.textContent = 'Error: ' + error.message; }
+  else { msg.textContent = `✓ Word scheduled for ${date}!`; document.getElementById('wotd-word').value=''; document.getElementById('wotd-meaning').value=''; document.getElementById('wotd-example').value=''; }
 }
 </script>
 </body>
