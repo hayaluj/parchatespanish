@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Payment Successful — Parcháte en Spanish</title>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@400;700&family=Plus+Jakarta+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Plus Jakarta Sans', sans-serif; background: #ede6d6; min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 2rem; }
+    .card { background: white; border-radius: 20px; padding: 3rem 2.5rem; width: 100%; max-width: 500px; box-shadow: 0 8px 40px rgba(0,0,0,0.1); text-align: center; }
+    .icon { font-size: 3.5rem; margin-bottom: 1rem; }
+    h1 { font-family: 'Fraunces', serif; font-size: 2rem; color: #1e5c3f; margin-bottom: 0.5rem; }
+    p { color: #666; font-size: 0.95rem; line-height: 1.6; margin-bottom: 1.5rem; }
+    .btn { display: inline-block; padding: 0.85rem 2rem; border-radius: 50px; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 0.95rem; font-weight: 600; text-decoration: none; cursor: pointer; transition: all 0.2s; border: none; }
+    .btn-primary { background: #1e5c3f; color: white; margin-right: 0.5rem; }
+    .btn-primary:hover { background: #164830; }
+    .btn-secondary { background: #f0b429; color: #1a1a1a; }
+    .btn-secondary:hover { background: #e0a520; }
+    .booking-section { background: #e8f5ee; border-radius: 12px; padding: 1.5rem; margin: 1.5rem 0; }
+    .booking-section h2 { font-family: 'Fraunces', serif; font-size: 1.2rem; color: #1e5c3f; margin-bottom: 0.5rem; }
+    .booking-section p { margin-bottom: 1rem; font-size: 0.9rem; }
+    .divider { height: 1px; background: #e0d9cc; margin: 1.5rem 0; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="icon">🎉</div>
+    <h1>¡Qué chimba!</h1>
+    <p>Your payment was successful. Welcome to the Parcháte community!</p>
+
+    <div class="booking-section" id="booking-section">
+      <h2>Book your first class</h2>
+      <p>Click below to schedule your lesson at a time that works for you.</p>
+      <a id="calendly-btn" href="https://calendly.com/parchatespanish" target="_blank" class="btn btn-secondary">Book Your Class →</a>
+    </div>
+
+    <div id="bootcamp-section" style="display:none;" class="booking-section">
+      <h2>Access your Slang Bootcamp</h2>
+      <p>Log in to your dashboard to access your course materials.</p>
+    </div>
+
+    <div class="divider"></div>
+    <a href="/dashboard.html" class="btn btn-primary">Go to My Dashboard</a>
+    <a href="/" class="btn" style="color:#666; margin-left:0.5rem;">Back to site</a>
+  </div>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const type = params.get('type');
+    if (type === 'slang_bootcamp') {
+      document.getElementById('booking-section').style.display = 'none';
+      document.getElementById('bootcamp-section').style.display = 'block';
+    }
+  </script>
+</body>
+</html>

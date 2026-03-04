@@ -920,7 +920,7 @@ footer {
           <li><span class="check">&#10003;</span> Native teacher</li>
           <li><span class="check">&#10003;</span> Flexible scheduling</li>
         </ul>
-        <button class="btn-pill">Book Now</button>
+       <button class="btn-pill" onclick="startCheckout('individual_1hr', 'individual')">Book Now</button>
       </div>
       <div class="price-card">
         <div class="plan-name">5-Hour Pack</div>
@@ -932,7 +932,7 @@ footer {
           <li><span class="check">&#10003;</span> Flexible scheduling</li>
           <li><span class="check">&#10003;</span> Use at your own pace</li>
         </ul>
-        <button class="btn-pill">Get 5 Hours</button>
+        <button class="btn-pill" onclick="startCheckout('individual_5hr', 'individual')">Get 5 Hours</button>
       </div>
       <div class="price-card featured">
         <div class="popular-badge">MOST POPULAR</div>
@@ -947,7 +947,7 @@ footer {
           <li><span class="check">&#10003;</span> Custom curriculum</li>
           <li><span class="check">&#10003;</span> Slang Bootcamp videos</li>
         </ul>
-        <button class="btn-pill-yellow">Get 10 Hours &rarr;</button>
+        <button class="btn-pill-yellow" onclick="startCheckout('individual_10hr', 'individual')">Get 10 Hours &rarr;</button>
       </div>
       <div class="price-card">
         <div class="plan-name">15+ Hour Pack</div>
@@ -960,7 +960,7 @@ footer {
           <li><span class="check">&#10003;</span> WhatsApp support</li>
           <li><span class="check">&#10003;</span> Slang Bootcamp videos</li>
         </ul>
-        <button class="btn-pill">Book now</button>
+        <button class="btn-pill" onclick="openExtraModal('individual')">Book now</button>
       </div>
     </div>
 
@@ -978,7 +978,7 @@ footer {
           <li><span class="check">&#10003;</span> Native teacher</li>
           <li><span class="check">&#10003;</span> Weekly schedule</li>
         </ul>
-        <button class="btn-pill">Join a Class</button>
+        <button class="btn-pill" onclick="startCheckout('group_1hr', 'group')">Join a Class</button>
       </div>
       <div class="price-card">
         <div class="plan-name" style="color:var(--green-bright);">5-Hour Pack</div>
@@ -990,7 +990,7 @@ footer {
           <li><span class="check">&#10003;</span> Native teacher</li>
           <li><span class="check">&#10003;</span> Flexible scheduling</li>
         </ul>
-        <button class="btn-pill">Get 5 Hours</button>
+       <button class="btn-pill" onclick="startCheckout('group_5hr', 'group')">Get 5 Hours</button>
       </div>
       <div class="price-card">
         <div class="plan-name" style="color:var(--green-bright);">10-Hour Pack</div>
@@ -1003,7 +1003,7 @@ footer {
           <li><span class="check">&#10003;</span> Progress tracking</li>
           <li><span class="check">&#10003;</span> Slang Bootcamp videos</li>
         </ul>
-        <button class="btn-pill">Get 10 Hours</button>
+       <button class="btn-pill" onclick="startCheckout('group_10hr', 'group')">Get 10 Hours</button>
       </div>
       <div class="price-card">
         <div class="plan-name" style="color:var(--green-bright);">15+ Hour Pack</div>
@@ -1016,7 +1016,7 @@ footer {
           <li><span class="check">&#10003;</span> WhatsApp support</li>
           <li><span class="check">&#10003;</span> Slang Bootcamp videos</li>
         </ul>
-        <button class="btn-pill">Book now</button>
+        <button class="btn-pill" onclick="openExtraModal('group')">Book Now</button>
       </div>
     </div>
 
@@ -1036,7 +1036,7 @@ footer {
           <li style="color:rgba(255,255,255,0.8);"><span class="check" style="background:rgba(240,180,41,0.15);border-color:rgba(240,180,41,0.4);color:var(--yellow);">&#10003;</span> Flexible scheduling</li>
           <li style="color:rgba(255,255,255,0.8);"><span class="check" style="background:rgba(240,180,41,0.15);border-color:rgba(240,180,41,0.4);color:var(--yellow);">&#10003;</span> Custom to your group goals</li>
         </ul>
-        <button class="btn-pill-yellow">Book the Pack</button>
+        <button class="btn-pill-yellow" onclick="openParcheModal()">Book the Pack</button>
       </div>
       <!-- Slang Bootcamp add-on -->
       <div class="price-card" style="background:linear-gradient(140deg,#2a1a0a,#1a0f06);border:1px solid rgba(212,98,26,0.3);">
@@ -1056,7 +1056,7 @@ footer {
           <li style="color:rgba(255,255,255,0.7);"><span class="check" style="background:rgba(212,98,26,0.15);border-color:rgba(212,98,26,0.3);color:var(--orange-light);">&#10003;</span> Lifetime access</li>
           <li style="color:rgba(255,255,255,0.7);"><span class="check" style="background:rgba(212,98,26,0.15);border-color:rgba(212,98,26,0.3);color:var(--orange-light);">&#10003;</span> Included free in 10+ hr packs</li>
         </ul>
-        <button class="btn-pill" style="background:var(--orange);color:white;">Buy Bootcamp &mdash; $20 &rarr;</button>
+        <button class="btn-pill" style="background:var(--orange);color:white;" onclick="startCheckout('slang_bootcamp', 'slang_bootcamp')">Buy Bootcamp &mdash; $20 &rarr;</button>
       </div>
     </div>
   </div>
@@ -1573,6 +1573,182 @@ async function sendContactForm(e) {
     btn.disabled = false;
   }
 }
+</script>
+<div id="extra-hours-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:9999;align-items:center;justify-content:center;">
+  <div style="background:white;border-radius:20px;padding:2.5rem;width:90%;max-width:420px;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.2);">
+    <div style="font-size:2rem;margin-bottom:0.5rem;" id="modal-icon">🎓</div>
+    <h2 style="font-family:'Fraunces',serif;color:#1e5c3f;margin-bottom:0.5rem;" id="modal-title">15-Hour Pack</h2>
+    <p style="color:#666;font-size:0.9rem;margin-bottom:1.5rem;" id="modal-desc">Includes 15 hours at $255. Add extra hours below.</p>
+    <div style="background:#f5f0e8;border-radius:12px;padding:1.25rem;margin-bottom:1.5rem;">
+      <label style="font-size:0.85rem;font-weight:600;color:#333;display:block;margin-bottom:0.5rem;" id="modal-label">Additional hours (optional)</label>
+      <div style="display:flex;align-items:center;justify-content:center;gap:1rem;">
+        <button onclick="changeQty(-1)" style="width:36px;height:36px;border-radius:50%;border:2px solid #1e5c3f;background:white;font-size:1.2rem;cursor:pointer;color:#1e5c3f;display:flex;align-items:center;justify-content:center;">−</button>
+        <span id="extra-qty" style="font-size:1.5rem;font-weight:700;color:#1e5c3f;min-width:2rem;">0</span>
+        <button onclick="changeQty(1)" style="width:36px;height:36px;border-radius:50%;border:2px solid #1e5c3f;background:white;font-size:1.2rem;cursor:pointer;color:#1e5c3f;display:flex;align-items:center;justify-content:center;">+</button>
+      </div>
+      <div style="margin-top:1rem;font-size:1.1rem;font-weight:700;color:#1e5c3f;">
+        Total: <span id="modal-total">$255</span>
+      </div>
+    </div>
+    <button onclick="proceedToCheckout()" style="width:100%;padding:0.85rem;background:#1e5c3f;color:white;border:none;border-radius:50px;font-family:'Plus Jakarta Sans',sans-serif;font-size:1rem;font-weight:600;cursor:pointer;margin-bottom:0.75rem;">Proceed to Checkout</button>
+    <button onclick="closeExtraModal()" style="background:none;border:none;color:#999;font-size:0.9rem;cursor:pointer;">Cancel</button>
+  </div>
+</div>
+
+<!-- Parche Pack Modal -->
+<div id="parche-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:9999;align-items:center;justify-content:center;">
+  <div style="background:white;border-radius:20px;padding:2.5rem;width:90%;max-width:420px;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.2);">
+    <div style="font-size:2rem;margin-bottom:0.5rem;">👥</div>
+    <h2 style="font-family:'Fraunces',serif;color:#1e5c3f;margin-bottom:0.5rem;">Parche Pack</h2>
+    <p style="color:#666;font-size:0.9rem;margin-bottom:1.5rem;">$25/hr flat for 2-3 students. How many hours?</p>
+    <div style="background:#f5f0e8;border-radius:12px;padding:1.25rem;margin-bottom:1.5rem;">
+      <label style="font-size:0.85rem;font-weight:600;color:#333;display:block;margin-bottom:0.5rem;">Number of hours (minimum 1)</label>
+      <div style="display:flex;align-items:center;justify-content:center;gap:1rem;">
+        <button onclick="changeParcheQty(-1)" style="width:36px;height:36px;border-radius:50%;border:2px solid #1e5c3f;background:white;font-size:1.2rem;cursor:pointer;color:#1e5c3f;">−</button>
+        <span id="parche-qty" style="font-size:1.5rem;font-weight:700;color:#1e5c3f;min-width:2rem;">1</span>
+        <button onclick="changeParcheQty(1)" style="width:36px;height:36px;border-radius:50%;border:2px solid #1e5c3f;background:white;font-size:1.2rem;cursor:pointer;color:#1e5c3f;">+</button>
+      </div>
+      <div style="margin-top:1rem;font-size:1.1rem;font-weight:700;color:#1e5c3f;">
+        Total: <span id="parche-total">$25</span>
+      </div>
+    </div>
+    <button onclick="proceedParcheCheckout()" style="width:100%;padding:0.85rem;background:#1e5c3f;color:white;border:none;border-radius:50px;font-family:'Plus Jakarta Sans',sans-serif;font-size:1rem;font-weight:600;cursor:pointer;margin-bottom:0.75rem;">Proceed to Checkout</button>
+    <button onclick="closeParcheModal()" style="background:none;border:none;color:#999;font-size:0.9rem;cursor:pointer;">Cancel</button>
+  </div>
+</div>
+
+<script>
+// ── Price IDs ──────────────────────────────────────────────
+const PRICES = {
+  // Individual
+  individual_1hr:   'price_1T7BsD6gN5JMbMQUYEODh7f5',
+  individual_5hr:   'price_1T7Bsr6gN5JMbMQUp4mBi4By',
+  individual_10hr:  'price_1T7BtM6gN5JMbMQUhF411ZOt',
+  individual_15base:'price_1T7Bx56gN5JMbMQUJ3pRxnyR',
+  individual_extra: 'price_1T7C606gN5JMbMQUOt0gffew',
+  // Group
+  group_1hr:        'price_1T7BzQ6gN5JMbMQUpxmUeNYO',
+  group_5hr:        'price_1T7C0I6gN5JMbMQURNRbQtmT',
+  group_10hr:       'price_1T7C0m6gN5JMbMQUgjY88qcp',
+  group_15base:     'price_1T7C1d6gN5JMbMQUQOnzbMtT',
+  group_extra:      'price_1T7CE36gN5JMbMQUTTKph2cx',
+  // Parche
+  parche:           'price_1T7CET6gN5JMbMQUsRrx62cA',
+};
+
+// ── Simple checkout (fixed price) ─────────────────────────
+async function startCheckout(priceKey, productType) {
+  const priceId = PRICES[priceKey];
+  if (!priceId) return alert('Product not found.');
+  try {
+    const res = await fetch('/api/checkout', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ priceId, productType })
+    });
+    const data = await res.json();
+    if (data.url) window.location.href = data.url;
+    else alert('Checkout error: ' + (data.error || 'Unknown error'));
+  } catch (e) {
+    alert('Network error. Please try again.');
+  }
+}
+
+// ── Extra hours modal (15+ individual & group) ────────────
+let currentModal = null;
+
+function openExtraModal(type) {
+  currentModal = type;
+  const isGroup = type === 'group';
+  document.getElementById('modal-title').textContent = isGroup ? '15-Class Group Pack' : '15-Hour Pack';
+  document.getElementById('modal-desc').textContent = isGroup
+    ? 'Includes 15 classes at $150. Add extra classes below.'
+    : 'Includes 15 hours at $255. Add extra hours below.';
+  document.getElementById('modal-label').textContent = isGroup ? 'Additional classes (optional)' : 'Additional hours (optional)';
+  document.getElementById('modal-icon').textContent = isGroup ? '👥' : '🎓';
+  document.getElementById('extra-qty').textContent = '0';
+  document.getElementById('modal-total').textContent = isGroup ? '$150' : '$255';
+  const overlay = document.getElementById('extra-hours-overlay');
+  overlay.style.display = 'flex';
+}
+
+function closeExtraModal() {
+  document.getElementById('extra-hours-overlay').style.display = 'none';
+}
+
+function changeQty(delta) {
+  const el = document.getElementById('extra-qty');
+  const newVal = Math.max(0, parseInt(el.textContent) + delta);
+  el.textContent = newVal;
+  const isGroup = currentModal === 'group';
+  const base = isGroup ? 150 : 255;
+  const perExtra = isGroup ? 10 : 17;
+  document.getElementById('modal-total').textContent = '$' + (base + newVal * perExtra);
+}
+
+async function proceedToCheckout() {
+  const extraQty = parseInt(document.getElementById('extra-qty').textContent);
+  const isGroup = currentModal === 'group';
+  const basePrice = isGroup ? PRICES.group_15base : PRICES.individual_15base;
+  const extraPriceId = isGroup ? PRICES.group_extra : PRICES.individual_extra;
+  const productType = isGroup ? 'group_15plus' : 'individual_15plus';
+  closeExtraModal();
+  try {
+    const res = await fetch('/api/checkout', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ basePrice, extraPriceId, extraQuantity: extraQty, productType })
+    });
+    const data = await res.json();
+    if (data.url) window.location.href = data.url;
+    else alert('Checkout error: ' + (data.error || 'Unknown error'));
+  } catch (e) {
+    alert('Network error. Please try again.');
+  }
+}
+
+// ── Parche Pack modal ─────────────────────────────────────
+function openParcheModal() {
+  document.getElementById('parche-qty').textContent = '1';
+  document.getElementById('parche-total').textContent = '$25';
+  document.getElementById('parche-overlay').style.display = 'flex';
+}
+
+function closeParcheModal() {
+  document.getElementById('parche-overlay').style.display = 'none';
+}
+
+function changeParcheQty(delta) {
+  const el = document.getElementById('parche-qty');
+  const newVal = Math.max(1, parseInt(el.textContent) + delta);
+  el.textContent = newVal;
+  document.getElementById('parche-total').textContent = '$' + (newVal * 25);
+}
+
+async function proceedParcheCheckout() {
+  const qty = parseInt(document.getElementById('parche-qty').textContent);
+  closeParcheModal();
+  try {
+    const res = await fetch('/api/checkout', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ priceId: PRICES.parche, quantity: qty, productType: 'parche_pack' })
+    });
+    const data = await res.json();
+    if (data.url) window.location.href = data.url;
+    else alert('Checkout error: ' + (data.error || 'Unknown error'));
+  } catch (e) {
+    alert('Network error. Please try again.');
+  }
+}
+
+// Close modals on overlay click
+document.getElementById('extra-hours-overlay').addEventListener('click', function(e) {
+  if (e.target === this) closeExtraModal();
+});
+document.getElementById('parche-overlay').addEventListener('click', function(e) {
+  if (e.target === this) closeParcheModal();
+});
 </script>
 </body>
 </html>
