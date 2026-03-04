@@ -6,15 +6,30 @@ const supabase = createClient(
   process.env.SUPABASE_SERVICE_KEY
 );
 
-module.exports = async (req, res) => {
+export const config = {
+  api: {
+    bodyParser: false,
+  },
+};
+
+async function buffer(readable) {
+  const chunks = [];
+  for await (const chunk of readable) {
+    chunks.push(typeof chunk === 'string' ? Buffer.from(chunk) : chunk);
+  }
+  return Buffer.concat(chunks);
+}
+
+export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).end();
 
+  const buf = await buffer(req);
   const sig = req.headers['stripe-signature'];
   let event;
 
   try {
     event = stripe.webhooks.constructEvent(
-      req.body,
+      buf,
       sig,
       process.env.STRIPE_WEBHOOK_SECRET
     );
@@ -38,4 +53,4 @@ module.exports = async (req, res) => {
   }
 
   res.status(200).json({ received: true });
-};
+}
