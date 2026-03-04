@@ -546,7 +546,7 @@ async function loadPurchases() {
   const { data } = await sb.from('purchases').select('*').eq('stripe_customer_email', currentUser.email).order('created_at', { ascending: false });
   const container = document.getElementById('purchases-list');
   if (!data || data.length === 0) {
-    container.innerHTML = `<div class="empty-state"><div class="emoji">🛒</div><h3>No purchases yet</h3><p>Head to our <a href="/#prices" style="color:var(--green);font-weight:600;">pricing page</a> to get started.</p></div>`;
+    container.innerHTML = `<div class="empty-state"><div class="emoji">🛒</div><h3>No purchases yet</h3><p>Head to our <a href="/index.html#prices" style="color:var(--green);font-weight:600;">pricing page</a> to get started.</p></div>`;
     return;
   }
   const names = { individual:'Individual Lesson', individual_15plus:'15+ Hour Pack (Individual)', group:'Group Class', group_15plus:'15+ Hour Pack (Group)', parche_pack:'Parche Pack', slang_bootcamp:'Colombian Slang Bootcamp' };
@@ -581,7 +581,7 @@ function renderCalendly(type) {
         <div style="font-size:2rem;margin-bottom:0.75rem;">📅</div>
         <h3>No credits yet</h3>
         <p>You haven't purchased any lessons yet. Buy a pack to book your first class!</p>
-        <a href="/#prices" class="btn-yellow" style="margin-top:0.5rem;">Browse lesson packages →</a>
+        <a href="/index.html#prices" class="btn-yellow" style="margin-top:0.5rem;">Browse lesson packages →</a>
         <div style="margin-top:1.5rem;opacity:0.5;pointer-events:none;filter:blur(3px);">
           <iframe src="${CALENDLY[type]}" width="100%" height="400" frameborder="0"></iframe>
         </div>
