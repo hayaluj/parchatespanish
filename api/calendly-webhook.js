@@ -18,16 +18,15 @@ async function buffer(readable) {
   return Buffer.concat(chunks);
 }
 
-// Map Calendly event type URIs to class types
 const CALENDLY_TYPE_MAP = {
   'parchate-spanish-individual-class': 'individual',
   'parchate-spanish-group-classes-a1': 'group',
   'new-meeting': 'parche',
 };
 
-function getClassType(eventTypeSlug) {
+function getClassType(slug) {
   for (const [key, value] of Object.entries(CALENDLY_TYPE_MAP)) {
-    if (eventTypeSlug.includes(key)) return value;
+    if (slug && slug.includes(key)) return value;
   }
   return null;
 }
@@ -38,7 +37,7 @@ export default async function handler(req, res) {
   const buf = await buffer(req);
   const body = JSON.parse(buf.toString());
 
-  // Verify Calendly webhook signature
+  // Optional signature verification
   const signature = req.headers['calendly-webhook-signature'];
   if (process.env.CALENDLY_WEBHOOK_SECRET && signature) {
     const hmac = crypto.createHmac('sha256', process.env.CALENDLY_WEBHOOK_SECRET);
@@ -52,21 +51,24 @@ export default async function handler(req, res) {
   const event = body.event;
   const payload = body.payload;
 
+  console.log('Calendly event received:', event);
+  console.log('Payload keys:', Object.keys(payload || {}));
+
   if (event === 'invitee.created') {
-    // A booking was made — deduct 1 credit
-    const email = payload?.email?.toLowerCase();
-    const eventTypeSlug = payload?.event_type?.slug || '';
+    const email = (payload?.email || payload?.invitee?.email || '').toLowerCase();
+    const eventTypeSlug = payload?.event_type?.slug || payload?.tracking?.event_type_name || '';
     const classType = getClassType(eventTypeSlug);
     const scheduledAt = payload?.scheduled_event?.start_time;
     const eventUri = payload?.scheduled_event?.uri;
     const eventId = eventUri?.split('/').pop();
+
+    console.log('Booking - email:', email, 'slug:', eventTypeSlug, 'classType:', classType);
 
     if (!email || !classType) {
       console.log('Unknown event type or missing email:', eventTypeSlug, email);
       return res.status(200).json({ received: true });
     }
 
-    // Check current credits
     const { data: credits } = await supabase
       .from('credits')
       .select('credits_remaining')
@@ -79,12 +81,10 @@ export default async function handler(req, res) {
       return res.status(200).json({ received: true });
     }
 
-    // Deduct 1 credit
     await supabase.from('credits').update({
       credits_remaining: credits.credits_remaining - 1,
     }).eq('student_email', email).eq('class_type', classType);
 
-    // Record the booking
     await supabase.from('bookings').insert({
       student_email: email,
       class_type: classType,
@@ -94,13 +94,16 @@ export default async function handler(req, res) {
       status: 'active',
     });
 
+    console.log('Credit deducted for', email, classType);
+
   } else if (event === 'invitee.canceled') {
-    // A booking was cancelled — refund 1 credit
-    const email = payload?.email?.toLowerCase();
+    const email = (payload?.email || payload?.invitee?.email || '').toLowerCase();
     const eventUri = payload?.scheduled_event?.uri;
     const eventId = eventUri?.split('/').pop();
-    const eventTypeSlug = payload?.event_type?.slug || '';
+    const eventTypeSlug = payload?.event_type?.slug || payload?.tracking?.event_type_name || '';
     const classType = getClassType(eventTypeSlug);
+
+    console.log('Cancellation - email:', email, 'classType:', classType);
 
     if (email && classType) {
       const { data: credits } = await supabase
@@ -116,9 +119,10 @@ export default async function handler(req, res) {
         }).eq('student_email', email).eq('class_type', classType);
       }
 
-      // Mark booking as cancelled
       await supabase.from('bookings').update({ status: 'cancelled' })
         .eq('calendly_event_id', eventId);
+
+      console.log('Credit refunded for', email, classType);
     }
   }
 
