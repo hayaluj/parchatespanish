@@ -384,6 +384,40 @@
           <div class="card">
             <div class="card-title">⚙️ Admin Panel <span class="admin-badge">ADMIN ONLY</span></div>
 
+            <!-- TEACHER CMS — sales@parchatespanish.com only -->
+            <div class="admin-section" id="teacher-cms-section" style="display:none;">
+              <div class="admin-title">👩‍🏫 Manage Teachers</div>
+              <div class="admin-form">
+                <div id="teacher-cms-list" style="margin-bottom:1.25rem;"></div>
+                <div style="border-top:1px solid #e0d9ce;padding-top:1.1rem;margin-top:0.5rem;">
+                  <div style="font-size:0.72rem;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:0.8rem;" id="teacher-form-label">➕ Add New Teacher</div>
+                  <input type="hidden" id="teacher-edit-id">
+                  <div class="admin-field"><label class="admin-label">Full Name</label><input class="admin-input" id="teacher-name" type="text" placeholder="e.g. Valentina Ríos"></div>
+                  <div class="admin-field"><label class="admin-label">Role / Location</label><input class="admin-input" id="teacher-role" type="text" placeholder="Spanish Teacher · Medellín"></div>
+                  <div class="admin-field"><label class="admin-label">Bio</label><textarea class="admin-input" id="teacher-bio" rows="3" placeholder="Personality, teaching style, fun facts..." style="resize:vertical;font-family:inherit;"></textarea></div>
+                  <div class="admin-field">
+                    <label class="admin-label">Photo</label>
+                    <div style="display:flex;gap:10px;align-items:flex-start;flex-wrap:wrap;">
+                      <input class="admin-input" id="teacher-photo-url" type="url" placeholder="Paste an image URL directly" style="flex:1;min-width:160px;">
+                      <label style="background:var(--green);color:white;padding:0.6rem 1rem;border-radius:8px;font-size:0.78rem;font-weight:700;cursor:pointer;white-space:nowrap;">
+                        📁 Upload Photo
+                        <input type="file" id="teacher-photo-file" accept="image/*" style="display:none;" onchange="previewTeacherPhoto(this)">
+                      </label>
+                    </div>
+                    <div id="teacher-photo-preview" style="display:none;margin-top:8px;width:80px;height:80px;border-radius:10px;overflow:hidden;border:2px solid var(--border);">
+                      <img id="teacher-preview-img" style="width:100%;height:100%;object-fit:cover;">
+                    </div>
+                  </div>
+                  <div class="admin-field"><label class="admin-label">Display Order (lower = first)</label><input class="admin-input" id="teacher-order" type="number" value="0" min="0" style="width:100px;"></div>
+                  <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:0.5rem;">
+                    <button class="btn-admin" onclick="saveTeacher()">💾 Save Teacher</button>
+                    <button class="btn-admin" onclick="clearTeacherForm()" style="background:#999;">✕ Clear</button>
+                  </div>
+                  <div class="admin-msg" id="teacher-msg"></div>
+                </div>
+              </div>
+            </div>
+
             <!-- Upload Teacher Notes -->
             <div class="admin-section">
               <div class="admin-title">📝 Upload Class Notes for a Student</div>
@@ -515,6 +549,10 @@ function showApp() {
   const savedAvatar = localStorage.getItem('avatar_' + email);
   if (savedAvatar) applyAvatar(savedAvatar);
   if (ADMIN_EMAILS.includes(email)) document.getElementById('admin-nav').style.display = 'block';
+  if (email === 'sales@parchatespanish.com') {
+    document.getElementById('teacher-cms-section').style.display = 'block';
+    loadTeacherCMS();
+  }
   loadSlang();
   loadStats();
   loadPurchases();
@@ -847,6 +885,114 @@ if (urlParams.get('tab') === 'booking') {
       if (btn) switchCalendly(bookingType, btn);
     }, 500);
   });
+}
+
+// ── TEACHER CMS (sales@parchatespanish.com only) ────────────────────────────
+
+async function loadTeacherCMS() {
+  const listEl = document.getElementById('teacher-cms-list');
+  listEl.innerHTML = '<div style="color:#999;font-size:0.8rem;">Loading...</div>';
+  const { data, error } = await sb.from('teachers').select('*').order('sort_order', { ascending: true }).order('created_at', { ascending: true });
+  if (error || !data) { listEl.innerHTML = '<div style="color:red;font-size:0.8rem;">Error loading teachers.</div>'; return; }
+  if (data.length === 0) { listEl.innerHTML = '<div style="color:#999;font-size:0.8rem;">No teachers yet. Add the first one below!</div>'; return; }
+  listEl.innerHTML = data.map(t => `
+    <div style="display:flex;align-items:center;gap:12px;background:white;border-radius:12px;padding:10px 14px;margin-bottom:8px;border:1px solid var(--border);">
+      <img src="${t.photo_url || 'https://via.placeholder.com/48?text=?'}" style="width:48px;height:48px;border-radius:8px;object-fit:cover;background:#e8e0d5;flex-shrink:0;">
+      <div style="flex:1;min-width:0;">
+        <div style="font-weight:700;font-size:0.9rem;color:var(--green);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${t.name}</div>
+        <div style="font-size:0.75rem;color:var(--text-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${t.role || ''}</div>
+      </div>
+      <button onclick="editTeacher(${JSON.stringify(t).replace(/"/g,'&quot;')})" style="padding:5px 12px;background:var(--green);color:white;border:none;border-radius:8px;font-size:0.75rem;font-weight:700;cursor:pointer;">Edit</button>
+      <button onclick="deleteTeacher('${t.id}')" style="padding:5px 12px;background:#e55;color:white;border:none;border-radius:8px;font-size:0.75rem;font-weight:700;cursor:pointer;">Delete</button>
+    </div>`).join('');
+}
+
+function editTeacher(t) {
+  document.getElementById('teacher-edit-id').value = t.id;
+  document.getElementById('teacher-name').value = t.name || '';
+  document.getElementById('teacher-role').value = t.role || '';
+  document.getElementById('teacher-bio').value = t.bio || '';
+  document.getElementById('teacher-photo-url').value = t.photo_url || '';
+  document.getElementById('teacher-order').value = t.sort_order ?? 0;
+  document.getElementById('teacher-form-label').textContent = '✏️ Editing: ' + t.name;
+  if (t.photo_url) {
+    document.getElementById('teacher-preview-img').src = t.photo_url;
+    document.getElementById('teacher-photo-preview').style.display = 'block';
+  }
+  document.getElementById('teacher-name').scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
+function clearTeacherForm() {
+  document.getElementById('teacher-edit-id').value = '';
+  document.getElementById('teacher-name').value = '';
+  document.getElementById('teacher-role').value = '';
+  document.getElementById('teacher-bio').value = '';
+  document.getElementById('teacher-photo-url').value = '';
+  document.getElementById('teacher-order').value = '0';
+  document.getElementById('teacher-form-label').textContent = '➕ Add New Teacher';
+  document.getElementById('teacher-photo-preview').style.display = 'none';
+  document.getElementById('teacher-photo-file').value = '';
+}
+
+function previewTeacherPhoto(input) {
+  if (!input.files || !input.files[0]) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    document.getElementById('teacher-preview-img').src = e.target.result;
+    document.getElementById('teacher-photo-preview').style.display = 'block';
+  };
+  reader.readAsDataURL(input.files[0]);
+}
+
+async function uploadTeacherPhoto(file) {
+  const ext = file.name.split('.').pop();
+  const path = `teachers/${Date.now()}.${ext}`;
+  const { data, error } = await sb.storage.from('teacher-photos').upload(path, file, { upsert: true });
+  if (error) throw new Error('Upload failed: ' + error.message);
+  const { data: urlData } = sb.storage.from('teacher-photos').getPublicUrl(path);
+  return urlData.publicUrl;
+}
+
+async function saveTeacher() {
+  const msg = document.getElementById('teacher-msg');
+  const name = document.getElementById('teacher-name').value.trim();
+  if (!name) { msg.textContent = '⚠️ Name is required.'; msg.style.color = 'red'; return; }
+  msg.textContent = 'Saving...'; msg.style.color = 'var(--green)';
+
+  let photoUrl = document.getElementById('teacher-photo-url').value.trim();
+  const fileInput = document.getElementById('teacher-photo-file');
+  if (fileInput.files && fileInput.files[0]) {
+    try { photoUrl = await uploadTeacherPhoto(fileInput.files[0]); }
+    catch(e) { msg.textContent = e.message; msg.style.color = 'red'; return; }
+  }
+
+  const payload = {
+    name,
+    role: document.getElementById('teacher-role').value.trim() || 'Spanish Teacher · Medellín',
+    bio: document.getElementById('teacher-bio').value.trim(),
+    photo_url: photoUrl || null,
+    sort_order: parseInt(document.getElementById('teacher-order').value) || 0,
+  };
+
+  const editId = document.getElementById('teacher-edit-id').value;
+  let error;
+  if (editId) {
+    ({ error } = await sb.from('teachers').update(payload).eq('id', editId));
+  } else {
+    ({ error } = await sb.from('teachers').insert(payload));
+  }
+
+  if (error) { msg.textContent = '❌ ' + error.message; msg.style.color = 'red'; return; }
+  msg.textContent = '✅ Teacher saved!';
+  clearTeacherForm();
+  loadTeacherCMS();
+}
+
+async function deleteTeacher(id) {
+  if (!confirm('Delete this teacher? This cannot be undone.')) return;
+  const { error } = await sb.from('teachers').delete().eq('id', id);
+  if (error) { alert('Error: ' + error.message); return; }
+  loadTeacherCMS();
 }
 </script>
 </body>

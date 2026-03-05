@@ -275,6 +275,7 @@ nav {
 .section-sub {
   font-size: 17px; color: var(--text-muted);
   margin-top: 14px; line-height: 1.6; max-width: 520px;
+  text-align: center; margin-left: auto; margin-right: auto;
 }
 
 /* ===== ABOUT ===== */
@@ -602,12 +603,14 @@ footer {
 }
 .team-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(300px, 380px));
   gap: 32px;
   max-width: 1100px;
   margin: 0 auto;
+  justify-content: center;
 }
 .teacher-card {
+  width: 100%;
   background: white;
   border-radius: 20px;
   overflow: hidden;
@@ -808,11 +811,12 @@ footer {
   </a>
   <div class="nav-links">
     <a href="#about">About</a>
-    <a href="#team">Teachers</a>
     <a href="#classes">Classes</a>
     <a href="#prices">Prices</a>
     <a href="#events">Events</a>
+    <a href="#team">Teachers</a>
     <a href="#contact">Contact</a>
+
     <a href="#" class="btn-nav" onclick="openSignupModal()">Get Started</a>
     <button onclick="openAuthModal()" class="nav-auth-btn">Log in</button>
   </div>
@@ -1047,7 +1051,7 @@ footer {
           <li><span class="check">&#10003;</span> Native teacher</li>
           <li><span class="check">&#10003;</span> Weekly schedule</li>
         </ul>
-        <button class="btn-pill" onclick="startCheckout('group_1hr', 'group')">Join a Class</button>
+        <button class="btn-pill" onclick="startCheckout('group_1hr', 'group')">Book Now</button>
       </div>
       <div class="price-card">
         <div class="plan-name" style="color:var(--green-bright);">5-Hour Pack</div>
@@ -1125,7 +1129,7 @@ footer {
           <li style="color:rgba(255,255,255,0.7);"><span class="check" style="background:rgba(212,98,26,0.15);border-color:rgba(212,98,26,0.3);color:var(--orange-light);">&#10003;</span> Lifetime access</li>
           <li style="color:rgba(255,255,255,0.7);"><span class="check" style="background:rgba(212,98,26,0.15);border-color:rgba(212,98,26,0.3);color:var(--orange-light);">&#10003;</span> Included free in 10+ hr packs</li>
         </ul>
-        <button class="btn-pill" style="background:var(--orange);color:white;" onclick="startCheckout('slang_bootcamp', 'slang_bootcamp')">Buy Bootcamp &mdash; $20 &rarr;</button>
+        <button class="btn-pill" style="background:#ccc;color:#888;cursor:not-allowed;" disabled>Coming Soon</button>
       </div>
     </div>
   </div>
@@ -1145,42 +1149,7 @@ footer {
   </div>
 </section>
 
-<!-- OUR TEAM -->
-<section id="team">
-  <div class="team-header">
-    <span class="section-eyebrow">Meet the Crew</span>
-    <h2 class="section-title">Our Teachers</h2>
-    <p class="section-sub" style="text-align:center;">Native Colombian teachers from Medellín — passionate, warm, and handpicked for their energy.</p>
-  </div>
-  <div class="team-grid">
-
-    <!-- Teacher card template – duplicate and fill in for each teacher -->
-    <div class="teacher-card">
-      <div class="teacher-photo-wrap">
-        <img class="teacher-photo" src="https://via.placeholder.com/220x220?text=Photo" alt="Teacher photo">
-      </div>
-      <div class="teacher-info">
-        <div class="teacher-name">Teacher Name</div>
-        <div class="teacher-role">Spanish Teacher · Medellín</div>
-        <p class="teacher-bio">Add a short bio here — personality, teaching style, specialties, or a fun fact about this teacher.</p>
-      </div>
-    </div>
-
-    <!-- Add more teacher cards below -->
-
-    <div class="teacher-card">
-      <div class="teacher-photo-wrap">
-        <img class="teacher-photo" src="https://via.placeholder.com/220x220?text=Photo" alt="Teacher photo">
-      </div>
-      <div class="teacher-info">
-        <div class="teacher-name">Teacher Name</div>
-        <div class="teacher-role">Spanish Teacher · Medellín</div>
-        <p class="teacher-bio">Add a short bio here — personality, teaching style, specialties, or a fun fact about this teacher.</p>
-      </div>
-    </div>
-
-  </div>
-</section>
+<!-- OUR TEAM -->\n<section id=\"team\">\n  <div class=\"team-header\">\n    <span class=\"section-eyebrow\">Meet the Crew</span>\n    <h2 class=\"section-title\">Our Teachers</h2>\n    <p class=\"section-sub\" style=\"text-align:center;max-width:600px;margin:14px auto 0;\">Native Colombian teachers from Medellín — passionate, warm, and handpicked for their energy.</p>\n  </div>\n  <div class=\"team-grid\" id=\"teacher-grid\">\n    <!-- Cards loaded dynamically from Supabase -->\n    <div class=\"teacher-card skeleton-card\">\n      <div class=\"teacher-photo-wrap\" style=\"background:#e8e0d5;\"></div>\n      <div class=\"teacher-info\">\n        <div style=\"height:18px;background:#e8e0d5;border-radius:6px;width:60%;margin-bottom:8px;\"></div>\n        <div style=\"height:12px;background:#e8e0d5;border-radius:6px;width:80%;margin-bottom:12px;\"></div>\n        <div style=\"height:12px;background:#e8e0d5;border-radius:6px;width:100%;margin-bottom:6px;\"></div>\n        <div style=\"height:12px;background:#e8e0d5;border-radius:6px;width:70%;\"></div>\n      </div>\n    </div>\n  </div>\n</section>
 
 <!-- CONTACT -->
 <section id="contact">
@@ -1188,7 +1157,7 @@ footer {
     <div class="contact-left">
       <span class="section-eyebrow">Get Started</span>
       <h2 class="section-title">Request a<br>Lesson</h2>
-      <p class="section-sub">We'll reply within 24 hours to confirm your booking.</p>
+      <p class="section-sub">We'll reply within 24 hours to schedule your individual intro class.</p>
       <div class="contact-perks">
         <div class="contact-perk">
           <div class="contact-perk-icon">🎁</div>
@@ -1253,7 +1222,7 @@ footer {
           <option value="">What kind of class are you looking for?</option>
           <option>Individual (1-on-1)</option>
           <option>Group class</option>
-          <option>Parche</option>
+          <option>Parche Class</option>
         </select>
       </div>
       <div class="form-group">
@@ -1871,4 +1840,42 @@ async function proceedParcheCheckout() {
     if (data.url) window.location.href = data.url;
     else alert('Checkout error: ' + (data.error || 'Unknown error'));
   } catch (e) {
-    a
+    alert('Network error. Please try again.');
+  }
+}
+</script>
+
+<!-- ── TEACHER CARDS — dynamic load from Supabase ── -->
+<script>
+(async function loadTeachers() {
+  const SUPABASE_URL = 'https://xqtpqhjddxalnhrkbnnn.supabase.co';
+  const SUPABASE_KEY = 'sb_publishable_0y6Hw4J6ECitfSRVa6Krsg_SHcB_aJR';
+  const grid = document.getElementById('teacher-grid');
+  try {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/teachers?order=sort_order.asc,created_at.asc`, {
+      headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
+    });
+    const teachers = await res.json();
+    if (!Array.isArray(teachers) || teachers.length === 0) {
+      grid.innerHTML = '<p style="text-align:center;color:#999;grid-column:1/-1;">Coming soon — meet our teachers!</p>';
+      return;
+    }
+    grid.innerHTML = teachers.map(t => `
+      <div class="teacher-card">
+        <div class="teacher-photo-wrap">
+          <img class="teacher-photo" src="${t.photo_url || 'https://via.placeholder.com/380x380?text=Photo'}" alt="${t.name}" loading="lazy">
+        </div>
+        <div class="teacher-info">
+          <div class="teacher-name">${t.name}</div>
+          <div class="teacher-role">${t.role || 'Spanish Teacher · Medellín'}</div>
+          <p class="teacher-bio">${t.bio || ''}</p>
+        </div>
+      </div>`).join('');
+  } catch(e) {
+    grid.innerHTML = '<p style="text-align:center;color:#999;grid-column:1/-1;">Unable to load teachers right now.</p>';
+  }
+})();
+</script>
+
+</body>
+</html>
