@@ -291,9 +291,9 @@
           <div class="card">
             <div class="card-title">📅 Book Your Next Lesson</div>
             <div class="booking-tabs">
-              <button class="booking-tab active" onclick="switchCalendly('individual', this)">Individual Lesson</button>
-              <button class="booking-tab" onclick="switchCalendly('group', this)">Group Class (A1)</button>
-              <button class="booking-tab" onclick="switchCalendly('parche', this)">Parche Pack</button>
+              <button class="booking-tab active" data-type="individual" onclick="switchCalendly('individual', this)">Individual Lesson</button>
+              <button class="booking-tab" data-type="group" onclick="switchCalendly('group', this)">Group Class (A1)</button>
+              <button class="booking-tab" data-type="parche" onclick="switchCalendly('parche', this)">Parche Pack</button>
             </div>
             <div id="booking-content">
               <div class="loading"><div class="spinner"></div></div>
@@ -472,6 +472,7 @@ const TAB_TITLES = { welcome:'Home', purchases:'My Purchases', booking:'Book a L
 let currentUser = null;
 let userPurchases = 0;
 let currentCalendly = 'individual';
+let userCredits = { individual: 0, group: 0, parche: 0 };
 
 // ── AUTH ──────────────────────────────────────────────────
 sb.auth.onAuthStateChange(async (event, session) => {
@@ -495,6 +496,7 @@ function showApp() {
   loadSlang();
   loadStats();
   loadPurchases();
+  loadCredits();
 }
 
 function showAuthGate() {
@@ -546,7 +548,7 @@ async function loadPurchases() {
   const { data } = await sb.from('purchases').select('*').eq('stripe_customer_email', currentUser.email).order('created_at', { ascending: false });
   const container = document.getElementById('purchases-list');
   if (!data || data.length === 0) {
-    container.innerHTML = `<div class="empty-state"><div class="emoji">🛒</div><h3>No purchases yet</h3><p>Head to our <a href="https://parchatespanish.vercel.app/#prices" class="btn-yellow" style="margin-top:0.5rem;">Browse lesson packages →</a> to get started.</p></div>`;
+    container.innerHTML = `<div class="empty-state"><div class="emoji">🛒</div><h3>No purchases yet</h3><p>Head to our <button onclick="window.location.href='https://parchatespanish.vercel.app/#prices'" class="btn-yellow" style="margin-top:0.5rem;">Browse lesson packages →</button> to get started.</p></div>`;
     return;
   }
   const names = { individual:'Individual Lesson', individual_15plus:'15+ Hour Pack (Individual)', group:'Group Class', group_15plus:'15+ Hour Pack (Group)', parche_pack:'Parche Pack', slang_bootcamp:'Colombian Slang Bootcamp' };
@@ -559,6 +561,27 @@ async function loadPurchases() {
       </div>
       <div class="purchase-amount">$${p.amount_usd}</div>
     </div>`).join('');
+}
+
+// ── CREDITS ───────────────────────────────────────────────
+async function loadCredits() {
+  const { data } = await sb.from('credits').select('*').eq('student_email', currentUser.email);
+  if (data) {
+    data.forEach(row => {
+      if (row.class_type in userCredits) userCredits[row.class_type] = row.credits_remaining;
+    });
+  }
+  updateCreditBadges();
+}
+
+function updateCreditBadges() {
+  const labels = { individual: 'Individual Lesson', group: 'Group Class (A1)', parche: 'Parche Pack' };
+  document.querySelectorAll('.booking-tab').forEach(btn => {
+    const type = btn.getAttribute('data-type');
+    if (!type) return;
+    const count = userCredits[type] || 0;
+    btn.innerHTML = `${labels[type]} <span style="background:${count > 0 ? 'rgba(255,255,255,0.3)' : 'rgba(0,0,0,0.15)'};border-radius:50px;padding:0 7px;font-size:0.75rem;margin-left:4px;">${count}</span>`;
+  });
 }
 
 // ── BOOKING ───────────────────────────────────────────────
@@ -575,19 +598,24 @@ function switchCalendly(type, btn) {
 
 function renderCalendly(type) {
   const container = document.getElementById('booking-content');
-  if (userPurchases === 0) {
+  const credits = userCredits[type] || 0;
+  if (credits <= 0) {
     container.innerHTML = `
       <div class="no-credits-overlay">
         <div style="font-size:2rem;margin-bottom:0.75rem;">📅</div>
-        <h3>No credits yet</h3>
-        <p>You haven't purchased any lessons yet. Buy a pack to book your first class!</p>
-        <a href="https://parchatespanish.vercel.app/#prices" class="btn-yellow" style="margin-top:0.5rem;">Browse lesson packages →</a>
+        <h3>No credits for this class type</h3>
+        <p>You don't have any ${type} class credits. Purchase a pack to book!</p>
+        <button onclick="window.location.href='https://parchatespanish.vercel.app/#prices'" class="btn-yellow" style="margin-top:0.5rem;">Browse lesson packages →</button>
         <div style="margin-top:1.5rem;opacity:0.5;pointer-events:none;filter:blur(3px);">
           <iframe src="${CALENDLY[type]}" width="100%" height="400" frameborder="0"></iframe>
         </div>
       </div>`;
   } else {
-    container.innerHTML = `<div class="calendly-wrap"><iframe src="${CALENDLY[type]}" frameborder="0"></iframe></div>`;
+    container.innerHTML = `
+      <div style="text-align:right;margin-bottom:0.75rem;">
+        <span style="background:var(--green);color:white;border-radius:50px;padding:0.3rem 0.9rem;font-size:0.8rem;font-weight:700;">✓ ${credits} credit${credits !== 1 ? 's' : ''} remaining</span>
+      </div>
+      <div class="calendly-wrap"><iframe src="${CALENDLY[type]}" frameborder="0"></iframe></div>`;
   }
 }
 
