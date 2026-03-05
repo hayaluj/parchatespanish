@@ -785,6 +785,17 @@ async function saveWordOfDay() {
   if (error) { msg.textContent = 'Error: ' + error.message; }
   else { msg.textContent = `✓ Word scheduled for ${date}!`; document.getElementById('wotd-word').value=''; document.getElementById('wotd-meaning').value=''; document.getElementById('wotd-example').value=''; }
 }
+const urlParams = new URLSearchParams(window.location.search);
+if (urlParams.get('tab') === 'booking') {
+  const bookingType = urlParams.get('type') || 'individual';
+  sb.auth.onAuthStateChange((event, session) => {
+    if (session?.user) setTimeout(() => {
+      switchTab('booking');
+      const btn = document.querySelector(`.booking-tab[data-type="${bookingType}"]`);
+      if (btn) switchCalendly(bookingType, btn);
+    }, 500);
+  });
+}
 </script>
 </body>
 </html>

@@ -32,7 +32,7 @@
     <div class="booking-section" id="booking-section">
       <h2>Book your first class</h2>
       <p>Click below to schedule your lesson at a time that works for you.</p>
-      <a id="calendly-btn" href="https://calendly.com/parchatespanish-sales/parchate-spanish-individual-class" target="_blank" class="btn btn-secondary">Book Your Class →</a>
+      <a id="calendly-btn" href="/dashboard.html?tab=booking&type=individual" class="btn btn-secondary">Book Your Class →</a>
     </div>
 
     <div id="bootcamp-section" style="display:none;" class="booking-section">
@@ -46,12 +46,30 @@
   </div>
 
   <script>
-    const params = new URLSearchParams(window.location.search);
-    const type = params.get('type');
-    if (type === 'slang_bootcamp') {
-      document.getElementById('booking-section').style.display = 'none';
-      document.getElementById('bootcamp-section').style.display = 'block';
-    }
+const params = new URLSearchParams(window.location.search);
+const type = params.get('type');
+
+const typeMap = {
+  individual: 'individual',
+  individual_5: 'individual',
+  individual_10: 'individual',
+  individual_15plus: 'individual',
+  group: 'group',
+  group_5: 'group',
+  group_10: 'group',
+  group_15plus: 'group',
+  parche_pack: 'parche',
+  slang_bootcamp: null
+};
+
+const calendlyType = typeMap[type] || 'individual';
+
+if (type === 'slang_bootcamp') {
+  document.getElementById('booking-section').style.display = 'none';
+  document.getElementById('bootcamp-section').style.display = 'block';
+} else {
+  document.getElementById('calendly-btn').href = `/dashboard.html?tab=booking&type=${calendlyType}`;
+}
   </script>
 </body>
 </html>
