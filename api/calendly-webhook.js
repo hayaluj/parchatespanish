@@ -18,16 +18,12 @@ async function buffer(readable) {
   return Buffer.concat(chunks);
 }
 
-const CALENDLY_TYPE_MAP = {
-  'parchate-spanish-individual-class': 'individual',
-  'parchate-spanish-group-classes-a1': 'group',
-  'new-meeting': 'parche',
-};
-
-function getClassType(slug) {
-  for (const [key, value] of Object.entries(CALENDLY_TYPE_MAP)) {
-    if (slug && slug.includes(key)) return value;
-  }
+function getClassType(str) {
+  if (!str) return null;
+  const s = str.toLowerCase();
+  if (s.includes('individual')) return 'individual';
+  if (s.includes('group') || s.includes('a1')) return 'group';
+  if (s.includes('parche') || s.includes('new-meeting')) return 'parche';
   return null;
 }
 
@@ -37,35 +33,36 @@ export default async function handler(req, res) {
   const buf = await buffer(req);
   const body = JSON.parse(buf.toString());
 
-  // Optional signature verification
   const signature = req.headers['calendly-webhook-signature'];
   if (process.env.CALENDLY_WEBHOOK_SECRET && signature) {
     const hmac = crypto.createHmac('sha256', process.env.CALENDLY_WEBHOOK_SECRET);
     hmac.update(buf);
     const digest = hmac.digest('hex');
-    if (digest !== signature) {
-      return res.status(401).send('Invalid signature');
-    }
+    if (digest !== signature) return res.status(401).send('Invalid signature');
   }
 
   const event = body.event;
   const payload = body.payload;
 
-  console.log('Calendly event received:', event);
-  console.log('Payload keys:', Object.keys(payload || {}));
+  const scheduledEventName = payload?.scheduled_event?.name || '';
+  const scheduledEventUri = payload?.scheduled_event?.uri || '';
+  const trackingStr = JSON.stringify(payload?.tracking || {});
+  console.log('Event:', event, '| scheduled_event.name:', scheduledEventName, '| tracking:', trackingStr);
+
+  const classType = getClassType(scheduledEventName)
+    || getClassType(scheduledEventUri)
+    || getClassType(trackingStr);
 
   if (event === 'invitee.created') {
-    const email = (payload?.email || payload?.invitee?.email || '').toLowerCase();
-    const eventTypeSlug = payload?.event_type?.slug || payload?.tracking?.event_type_name || '';
-    const classType = getClassType(eventTypeSlug);
+    const email = (payload?.email || '').toLowerCase();
     const scheduledAt = payload?.scheduled_event?.start_time;
     const eventUri = payload?.scheduled_event?.uri;
     const eventId = eventUri?.split('/').pop();
 
-    console.log('Booking - email:', email, 'slug:', eventTypeSlug, 'classType:', classType);
+    console.log('Booking - email:', email, 'classType:', classType);
 
     if (!email || !classType) {
-      console.log('Unknown event type or missing email:', eventTypeSlug, email);
+      console.log('Missing email or classType - email:', email, 'classType:', classType, 'scheduledEventName:', scheduledEventName);
       return res.status(200).json({ received: true });
     }
 
@@ -97,11 +94,9 @@ export default async function handler(req, res) {
     console.log('Credit deducted for', email, classType);
 
   } else if (event === 'invitee.canceled') {
-    const email = (payload?.email || payload?.invitee?.email || '').toLowerCase();
+    const email = (payload?.email || '').toLowerCase();
     const eventUri = payload?.scheduled_event?.uri;
     const eventId = eventUri?.split('/').pop();
-    const eventTypeSlug = payload?.event_type?.slug || payload?.tracking?.event_type_name || '';
-    const classType = getClassType(eventTypeSlug);
 
     console.log('Cancellation - email:', email, 'classType:', classType);
 
