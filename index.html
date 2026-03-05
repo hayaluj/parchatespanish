@@ -590,6 +590,72 @@ footer {
 }
 
 /* ===== CONTACT ===== */
+
+/* ── OUR TEAM ──────────────────────────────────────── */
+#team {
+  padding: 90px 24px;
+  background: #f9f6f1;
+}
+.team-header {
+  text-align: center;
+  margin-bottom: 56px;
+}
+.team-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 32px;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+.teacher-card {
+  background: white;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.07);
+  transition: transform 0.25s, box-shadow 0.25s;
+}
+.teacher-card:hover { transform: translateY(-6px); box-shadow: 0 16px 48px rgba(0,0,0,0.12); }
+.teacher-photo-wrap {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  background: #e8e0d5;
+}
+.teacher-photo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.teacher-info {
+  padding: 24px 22px 28px;
+}
+.teacher-name {
+  font-family: 'Fraunces', serif;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--green);
+  margin-bottom: 4px;
+}
+.teacher-role {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--orange);
+  margin-bottom: 12px;
+}
+.teacher-bio {
+  font-size: 14px;
+  color: var(--text-muted);
+  line-height: 1.6;
+  margin: 0;
+}
+@media (max-width: 600px) {
+  #team { padding: 60px 16px; }
+  .team-grid { grid-template-columns: 1fr; }
+}
+
 #contact {
   padding: 110px 80px;
   background: var(--dark);
@@ -742,6 +808,7 @@ footer {
   </a>
   <div class="nav-links">
     <a href="#about">About</a>
+    <a href="#team">Teachers</a>
     <a href="#classes">Classes</a>
     <a href="#prices">Prices</a>
     <a href="#events">Events</a>
@@ -833,13 +900,40 @@ footer {
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="#25D366"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
             +57 301 4411899
           </a>
-          <a href="mailto:sales@parchate.com">
+          <a href="/cdn-cgi/l/email-protection#99eaf8f5fcead9e9f8ebfaf1f8edfcb7faf6f4">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-            sales@parchate.com
+            <span class="__cf_email__" data-cfemail="b4c7d5d8d1c7f4c4d5c6d7dcd5c0d19ad7dbd9">[email&#160;protected]</span>
           </a>
         </div>
       </div>
     </div>
+  </div>
+</section>
+
+
+<!-- OUR TEAM -->
+<section id="team">
+  <div class="team-header">
+    <span class="section-eyebrow">Meet the Crew</span>
+    <h2 class="section-title">Our Teachers</h2>
+    <p class="section-sub">Native Colombian teachers from Medellín — passionate, warm, and handpicked for their energy.</p>
+  </div>
+  <div class="team-grid">
+
+    <!-- Teacher card template – duplicate and fill in for each teacher -->
+    <div class="teacher-card">
+      <div class="teacher-photo-wrap">
+        <img class="teacher-photo" src="https://via.placeholder.com/220x220?text=Photo" alt="Teacher photo">
+      </div>
+      <div class="teacher-info">
+        <div class="teacher-name">Teacher Name</div>
+        <div class="teacher-role">Spanish Teacher · Medellín</div>
+        <p class="teacher-bio">Add a short bio here — personality, teaching style, specialties, or a fun fact about this teacher.</p>
+      </div>
+    </div>
+
+    <!-- Add more teacher cards below -->
+
   </div>
 </section>
 
@@ -1132,6 +1226,34 @@ footer {
         </select>
       </div>
       <div class="form-group">
+        <label class="form-label">Hours per week</label>
+        <select class="form-select">
+          <option value="">How much time can you dedicate?</option>
+          <option>1–2 hours / week</option>
+          <option>3–6 hours / week</option>
+          <option>6–10 hours / week</option>
+          <option>10+ hours / week</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Type of class</label>
+        <select class="form-select">
+          <option value="">What kind of class are you looking for?</option>
+          <option>Individual (1-on-1)</option>
+          <option>Group class</option>
+          <option>Parche (immersive hangout)</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Availability (Eastern Time)</label>
+        <select class="form-select">
+          <option value="">When are you usually free?</option>
+          <option>Morning (8AM–10AM ET)</option>
+          <option>Afternoon (12PM–2PM ET)</option>
+          <option>Evening (4PM–6PM ET)</option>
+        </select>
+      </div>
+      <div class="form-group">
         <label class="form-label">Learning Goals</label>
         <textarea class="form-textarea" placeholder="e.g. I want to move to Medellín and navigate daily life with confidence…"></textarea>
       </div>
@@ -1165,9 +1287,9 @@ footer {
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="#25D366"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
           +57 301 4411899
         </a>
-        <a href="mailto:sales@parchate.com">
+        <a href="/cdn-cgi/l/email-protection#3340525f564073435241505b5247561d505c5e">
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-          sales@parchate.com
+          <span class="__cf_email__" data-cfemail="d5a6b4b9b0a695a5b4a7b6bdb4a1b0fbb6bab8">[email&#160;protected]</span>
         </a>
         <span>Online · Medellín, Colombia</span>
       </div>
@@ -1417,7 +1539,7 @@ footer {
 
 
 <!-- ── SCRIPT — paste before </body> ───────────────────────── -->
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 (function() {
   // ── Config ────────────────────────────────────────────────
@@ -1737,17 +1859,4 @@ async function proceedParcheCheckout() {
     if (data.url) window.location.href = data.url;
     else alert('Checkout error: ' + (data.error || 'Unknown error'));
   } catch (e) {
-    alert('Network error. Please try again.');
-  }
-}
-
-// Close modals on overlay click
-document.getElementById('extra-hours-overlay').addEventListener('click', function(e) {
-  if (e.target === this) closeExtraModal();
-});
-document.getElementById('parche-overlay').addEventListener('click', function(e) {
-  if (e.target === this) closeParcheModal();
-});
-</script>
-</body>
-</html>
+    a
