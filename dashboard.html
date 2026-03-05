@@ -260,9 +260,9 @@
             <button class="btn-yellow" onclick="switchTab('booking')">📅 Book your next class</button>
           </div>
           <div class="quick-stats">
-            <div class="stat-card"><div class="stat-number" id="stat-purchases">—</div><div class="stat-label">Purchases</div></div>
-            <div class="stat-card"><div class="stat-number" id="stat-notes">—</div><div class="stat-label">Class Notes</div></div>
-            <div class="stat-card"><div class="stat-number" id="stat-videos">—</div><div class="stat-label">Videos</div></div>
+            <div class="stat-card"><div class="stat-number" id="stat-credits">—</div><div class="stat-label">Credits Remaining</div></div>
+            <div class="stat-card"><div class="stat-number" id="stat-completed">—</div><div class="stat-label">Classes Completed</div></div>
+            <div class="stat-card"><div class="stat-number" id="stat-streak">—</div><div class="stat-label">Week Streak 🔥</div></div>
           </div>
           <div class="slang-card">
             <div class="slang-label">🇨🇴 Colombian Word of the Day</div>
@@ -532,15 +532,43 @@ async function loadSlang() {
 
 // ── STATS ─────────────────────────────────────────────────
 async function loadStats() {
-  const [p, n, v] = await Promise.all([
-    sb.from('purchases').select('id', {count:'exact'}).eq('stripe_customer_email', currentUser.email),
-    sb.from('student_notes').select('id', {count:'exact'}).eq('student_email', currentUser.email),
-    sb.from('videos').select('id', {count:'exact'}).eq('is_published', true)
-  ]);
-  userPurchases = p.count || 0;
-  document.getElementById('stat-purchases').textContent = p.count ?? 0;
-  document.getElementById('stat-notes').textContent = n.count ?? 0;
-  document.getElementById('stat-videos').textContent = v.count ?? 0;
+  const email = currentUser.email;
+
+  // Credits remaining (sum across all class types)
+  const { data: creditsData } = await sb.from('credits').select('credits_remaining').eq('student_email', email);
+  const totalCredits = (creditsData || []).reduce((sum, r) => sum + (r.credits_remaining || 0), 0);
+  document.getElementById('stat-credits').textContent = totalCredits;
+
+  // Classes completed
+  const { data: bookingsData } = await sb.from('bookings').select('scheduled_at').eq('student_email', email).eq('status', 'active');
+  const completed = (bookingsData || []).length;
+  document.getElementById('stat-completed').textContent = completed;
+
+  // Week streak — count consecutive weeks (Mon–Sun) with at least one booking
+  const weeks = new Set((bookingsData || []).map(b => {
+    const d = new Date(b.scheduled_at);
+    const day = d.getDay(); // 0=Sun
+    const monday = new Date(d);
+    monday.setDate(d.getDate() - ((day + 6) % 7));
+    return monday.toISOString().split('T')[0];
+  }));
+
+  let streak = 0;
+  const today = new Date();
+  const thisMonday = new Date(today);
+  thisMonday.setDate(today.getDate() - ((today.getDay() + 6) % 7));
+
+  for (let i = 0; i < 52; i++) {
+    const monday = new Date(thisMonday);
+    monday.setDate(thisMonday.getDate() - i * 7);
+    const key = monday.toISOString().split('T')[0];
+    if (weeks.has(key)) {
+      streak++;
+    } else if (i > 0) {
+      break; // gap found, stop counting
+    }
+  }
+  document.getElementById('stat-streak').textContent = streak;
 }
 
 // ── PURCHASES ────────────────────────────────────────────
