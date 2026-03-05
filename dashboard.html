@@ -334,6 +334,22 @@
           <div class="card">
             <div class="card-title">👤 My Profile</div>
             <div class="profile-section">
+              <!-- Profile Picture -->
+              <div style="display:flex;align-items:center;gap:1.25rem;margin-bottom:1.5rem;">
+                <div style="position:relative;flex-shrink:0;">
+                  <div id="profile-avatar-large" style="width:72px;height:72px;border-radius:50%;background:var(--yellow);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:1.6rem;color:var(--dark);overflow:hidden;border:3px solid var(--border);">
+                    <span id="profile-avatar-initials">?</span>
+                    <img id="profile-avatar-img" src="" style="display:none;width:100%;height:100%;object-fit:cover;" />
+                  </div>
+                  <label for="avatar-upload" style="position:absolute;bottom:0;right:0;background:var(--green);color:white;border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:0.7rem;border:2px solid white;">✏️</label>
+                  <input type="file" id="avatar-upload" accept="image/*" style="display:none;" onchange="uploadAvatar(event)">
+                </div>
+                <div>
+                  <div style="font-weight:700;color:var(--text);" id="profile-display-name">—</div>
+                  <div style="font-size:0.8rem;color:var(--text-muted);" id="profile-display-email">—</div>
+                  <div id="avatar-msg" class="profile-msg"></div>
+                </div>
+              </div>
               <div class="profile-field">
                 <div class="profile-label">Full Name</div>
                 <input class="profile-input" id="profile-name" type="text" placeholder="Your full name">
@@ -492,6 +508,12 @@ function showApp() {
   document.getElementById('welcome-name').textContent = `¡Bienvenido de vuelta, ${name.split(' ')[0]}!`;
   document.getElementById('profile-name').value = meta.full_name || meta.name || '';
   document.getElementById('profile-email').value = email;
+  document.getElementById('profile-display-name').textContent = meta.full_name || meta.name || name;
+  document.getElementById('profile-display-email').textContent = email;
+  document.getElementById('profile-avatar-initials').textContent = name.slice(0,2).toUpperCase();
+  // Load saved avatar if exists
+  const savedAvatar = localStorage.getItem('avatar_' + email);
+  if (savedAvatar) applyAvatar(savedAvatar);
   if (ADMIN_EMAILS.includes(email)) document.getElementById('admin-nav').style.display = 'block';
   loadSlang();
   loadStats();
@@ -785,6 +807,36 @@ async function saveWordOfDay() {
   if (error) { msg.textContent = 'Error: ' + error.message; }
   else { msg.textContent = `✓ Word scheduled for ${date}!`; document.getElementById('wotd-word').value=''; document.getElementById('wotd-meaning').value=''; document.getElementById('wotd-example').value=''; }
 }
+// ── AVATAR ────────────────────────────────────────────────
+function applyAvatar(dataUrl) {
+  const sidebarAvatar = document.getElementById('user-avatar');
+  sidebarAvatar.innerHTML = `<img src="${dataUrl}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;" />`;
+  document.getElementById('profile-avatar-initials').style.display = 'none';
+  const img = document.getElementById('profile-avatar-img');
+  img.src = dataUrl;
+  img.style.display = 'block';
+}
+
+function uploadAvatar(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  if (file.size > 2 * 1024 * 1024) {
+    document.getElementById('avatar-msg').textContent = 'Image must be under 2MB.';
+    document.getElementById('avatar-msg').className = 'profile-msg error';
+    return;
+  }
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    const dataUrl = e.target.result;
+    localStorage.setItem('avatar_' + currentUser.email, dataUrl);
+    applyAvatar(dataUrl);
+    document.getElementById('avatar-msg').textContent = 'Photo updated!';
+    document.getElementById('avatar-msg').className = 'profile-msg success';
+    setTimeout(() => document.getElementById('avatar-msg').textContent = '', 2000);
+  };
+  reader.readAsDataURL(file);
+}
+
 const urlParams = new URLSearchParams(window.location.search);
 if (urlParams.get('tab') === 'booking') {
   const bookingType = urlParams.get('type') || 'individual';
